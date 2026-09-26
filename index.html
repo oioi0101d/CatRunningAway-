@@ -2,304 +2,898 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>GATO RUN 😼</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>CatRunningAway 😼</title>
 
 <style>
 *{
-  box-sizing:border-box;
-  user-select:none;
-  -webkit-user-select:none;
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-body{
-  margin:0;
-  overflow:hidden;
-  background:#101827;
-  font-family:Arial,sans-serif;
-  touch-action:manipulation;
+html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+    background:#07111e;
+    color:white;
+    touch-action:manipulation;
 }
+
+button{
+    font:inherit;
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+/* AVISO DE CELULAR EM PÉ */
+#rotateScreen{
+    position:fixed;
+    inset:0;
+    z-index:99999;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background:#07111e;
+    color:white;
+    font-size:25px;
+    font-weight:bold;
+    padding:30px;
+}
+
+@media (orientation:portrait){
+    #rotateScreen{
+        display:flex;
+    }
+
+    #app{
+        display:none!important;
+    }
+}
+
+/* APP */
+
+#app{
+    position:relative;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+.screen{
+    position:absolute;
+    inset:0;
+}
+
+/* BOTÕES */
+
+.btn{
+    border:2px solid #315c7f;
+    border-radius:10px;
+    padding:12px 18px;
+    background:linear-gradient(#16436c,#0a233c);
+    color:white;
+    font-weight:900;
+    box-shadow:0 3px 0 #02070d;
+}
+
+.btn.green{
+    background:linear-gradient(#2bee78,#0bb84e);
+    color:#03170b;
+    border-color:#66ff9e;
+}
+
+.btn.big{
+    min-width:210px;
+    font-size:19px;
+    padding:15px;
+}
+
+/* MENU */
+
+#menu{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(#062342,#071526);
+}
+
+.menuBg{
+    position:absolute;
+    inset:0;
+
+    background:
+    linear-gradient(
+        transparent 62%,
+        #16384d 62%
+    ),
+
+    repeating-linear-gradient(
+        90deg,
+        #0a2843 0 42px,
+        #0d3150 42px 82px,
+        #082238 82px 120px
+    );
+
+    opacity:.75;
+}
+
+.menuContent{
+    position:relative;
+    z-index:2;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    gap:15px;
+
+    text-align:center;
+}
+
+.logo{
+    font-size:clamp(35px,8vw,65px);
+    font-weight:1000;
+    line-height:.85;
+
+    text-shadow:
+    5px 5px #030a12,
+    -2px -2px #1590dc;
+}
+
+.menuCat{
+    font-size:75px;
+}
+
+.menuText{
+    font-size:13px;
+    color:#b8cde0;
+}
+
+/* JOGO */
 
 #game{
-  position:relative;
-  width:100vw;
-  height:100vh;
-  overflow:hidden;
-  background:linear-gradient(
-    #55baf2 0%,
-    #9bddff 55%,
-    #82cf5c 55%,
-    #82cf5c 65%,
-    #555 65%,
-    #333 100%
-  );
+    background:#68bde9;
 }
 
-/* HUD */
+.hud{
+    position:absolute;
+    z-index:20;
 
-#hud{
-  position:absolute;
-  top:12px;
-  left:15px;
-  right:15px;
-  display:flex;
-  justify-content:space-between;
-  color:white;
-  font-size:21px;
-  font-weight:bold;
-  z-index:20;
-  text-shadow:2px 2px 3px #222;
+    top:0;
+    left:0;
+    right:0;
+
+    height:62px;
+
+    padding:7px 12px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    background:linear-gradient(#0d3153,#07192b);
+
+    border-bottom:2px solid #2a638c;
+
+    font-weight:900;
 }
 
-/* CHÃO */
+.world{
+    position:absolute;
 
-#ground{
-  position:absolute;
-  left:0;
-  bottom:35%;
-  width:100%;
-  height:10px;
-  background:#292929;
-  border-top:4px solid #171717;
+    inset:62px 0 0;
+
+    overflow:hidden;
+
+    background:
+    linear-gradient(
+        #53b7ed 0 53%,
+        #68b64e 53% 63%,
+        #34393e 63% 100%
+    );
+}
+
+.cloud{
+    position:absolute;
+    font-size:50px;
+    opacity:.65;
+}
+
+.c1{
+    top:10%;
+    left:12%;
+}
+
+.c2{
+    top:18%;
+    left:68%;
+}
+
+.city{
+    position:absolute;
+
+    left:0;
+    right:0;
+
+    bottom:37%;
+
+    height:24%;
+
+    background:#397b91;
+
+    clip-path:polygon(
+        0 75%,
+        5% 50%,
+        10% 68%,
+        14% 30%,
+        20% 62%,
+        25% 43%,
+        31% 65%,
+        37% 28%,
+        43% 61%,
+        49% 39%,
+        55% 67%,
+        61% 31%,
+        67% 62%,
+        73% 42%,
+        79% 66%,
+        85% 33%,
+        91% 62%,
+        96% 43%,
+        100% 60%,
+        100% 100%,
+        0 100%
+    );
+}
+
+.road{
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:38%;
+
+    background:#383d42;
+
+    border-top:6px solid #24282b;
+}
+
+.road:after{
+    content:"";
+
+    position:absolute;
+
+    top:52%;
+    left:0;
+    right:0;
+
+    height:5px;
+
+    background:
+    repeating-linear-gradient(
+        90deg,
+        #ddd 0 48px,
+        transparent 48px 92px
+    );
+
+    opacity:.55;
 }
 
 /* GATO */
 
-#cat{
-  position:absolute;
-  left:12%;
-  bottom:35%;
-  font-size:58px;
-  z-index:5;
+.player{
+    position:absolute;
+
+    z-index:10;
+
+    left:13%;
+    bottom:33%;
+
+    font-size:60px;
+
+    line-height:1;
+
+    filter:drop-shadow(0 7px 3px #0008);
+}
+
+.player.jump{
+    animation:jump .68s ease-out;
+}
+
+@keyframes jump{
+
+    0%{
+        transform:translateY(0);
+    }
+
+    45%{
+        transform:translateY(-155px);
+    }
+
+    100%{
+        transform:translateY(0);
+    }
+
 }
 
 /* CACHORRO */
 
-#dog{
-  position:absolute;
-  right:-90px;
-  bottom:35%;
-  font-size:58px;
-  z-index:5;
+.dog{
+    position:absolute;
+
+    z-index:10;
+
+    right:-90px;
+    bottom:33%;
+
+    font-size:58px;
+
+    line-height:1;
+
+    filter:drop-shadow(0 7px 3px #0008);
 }
 
-/* RAÇÃO */
-
-.food{
-  position:absolute;
-  font-size:30px;
-  z-index:4;
+.dog.run{
+    animation:run var(--speed) linear forwards;
 }
 
-/* BOTÃO PULO */
+@keyframes run{
 
-#jump{
-  position:absolute;
-  right:20px;
-  bottom:12%;
-  width:80px;
-  height:80px;
-  border-radius:50%;
-  border:0;
-  background:#20d86b;
-  font-size:35px;
-  z-index:30;
+    from{
+        right:-90px;
+    }
+
+    to{
+        right:110%;
+    }
+
 }
 
-/* TELAS */
+.tip{
+    position:absolute;
 
-.screen{
-  position:absolute;
-  inset:0;
-  background:rgba(5,12,25,.95);
-  color:white;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:15px;
-  z-index:100;
+    z-index:15;
+
+    left:0;
+    right:0;
+
+    bottom:7%;
+
+    text-align:center;
+
+    font-weight:900;
+
+    text-shadow:2px 2px #000;
 }
 
-.hidden{
-  display:none!important;
+/* MODAIS */
+
+.modal{
+    position:absolute;
+
+    z-index:100;
+
+    inset:0;
+
+    background:#020b16ee;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:16px;
 }
 
-h1{
-  font-size:48px;
-  margin:0;
-  text-shadow:4px 4px #111;
+.card{
+    width:min(520px,100%);
+    max-height:92vh;
+    overflow:auto;
 }
 
-h2{
-  font-size:32px;
+.panel{
+    background:#081d32;
+
+    border:2px solid #286087;
+
+    border-radius:10px;
+
+    box-shadow:0 8px 30px #0009;
+
+    padding:20px;
 }
 
-button.menuButton{
-  width:240px;
-  padding:15px;
-  border:0;
-  border-radius:12px;
-  background:#20d86b;
-  color:#06150c;
-  font-size:21px;
-  font-weight:bold;
-  box-shadow:0 5px #087b39;
+.title{
+    text-align:center;
+
+    font-size:27px;
+
+    font-weight:1000;
+
+    margin-bottom:15px;
 }
 
 /* LOJA */
 
-#shopList{
-  width:min(92%,500px);
-  max-height:60vh;
-  overflow:auto;
+.shop{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
 }
 
 .shopItem{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin:8px 0;
-  padding:10px;
-  background:#17243a;
-  border:2px solid #304d70;
-  border-radius:12px;
+    display:grid;
+
+    grid-template-columns:58px 1fr auto;
+
+    gap:10px;
+
+    align-items:center;
+
+    background:#0b253d;
+
+    border:2px solid #225477;
+
+    border-radius:9px;
+
+    padding:10px;
 }
 
-.shopCat{
-  font-size:40px;
+.shopEmoji{
+    font-size:42px;
+    text-align:center;
+}
+
+.shopName{
+    font-weight:900;
+}
+
+.desc{
+    font-size:12px;
+    color:#a9bdcf;
+    margin-top:4px;
+}
+
+.price{
+    font-size:12px;
+    color:#ffe45b;
+    margin-top:5px;
 }
 
 .buy{
-  border:0;
-  border-radius:8px;
-  padding:10px;
-  background:#20d86b;
-  font-weight:bold;
+    border:2px solid #59ff9b;
+
+    border-radius:8px;
+
+    background:#12c85a;
+
+    color:#03170b;
+
+    padding:10px;
+
+    min-width:95px;
+
+    font-weight:900;
+
+    touch-action:manipulation;
 }
 
-/* ANIMAÇÕES */
-
-.jumpAnimation{
-  animation:jump .65s ease;
+.buy:active{
+    transform:scale(.94);
 }
 
-@keyframes jump{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-160px)}
-  100%{transform:translateY(0)}
+.buy.owned{
+    background:#16436c;
+    color:white;
+    border-color:#315c7f;
 }
 
-.runDog{
-  animation:dogRun 2s linear;
+/* GATOS */
+
+.catGrid{
+    display:grid;
+
+    grid-template-columns:
+    repeat(3,1fr);
+
+    gap:9px;
 }
 
-@keyframes dogRun{
-  from{
-    right:-90px;
-  }
-  to{
-    right:110%;
-  }
+.cat{
+    background:#0b253d;
+
+    border:2px solid #25577b;
+
+    border-radius:9px;
+
+    padding:10px;
+
+    text-align:center;
 }
 
-/* NUVENS */
+.cat.selected{
+    border-color:#ffe34c;
 
-.cloud{
-  position:absolute;
-  font-size:60px;
-  opacity:.8;
+    box-shadow:
+    0 0 0 2px #ffe34c55;
+}
+
+.catEmoji{
+    font-size:44px;
+}
+
+.cat b{
+    display:block;
+
+    font-size:13px;
+
+    margin:5px 0;
+}
+
+.cat small{
+    color:#a9bdcf;
+}
+
+@media(max-width:600px){
+
+    .catGrid{
+        grid-template-columns:
+        repeat(2,1fr);
+    }
+
+    .player{
+        font-size:53px;
+    }
+
+    .dog{
+        font-size:51px;
+    }
+
 }
 </style>
 </head>
 
 <body>
 
-<div id="game">
+<!-- TELA DE ROTAÇÃO -->
 
-  <div class="cloud" style="top:12%;left:15%">☁️</div>
-  <div class="cloud" style="top:20%;left:65%">☁️</div>
+<div id="rotateScreen">
 
-  <!-- HUD -->
+    📱 ↔️
 
-  <div id="hud">
-    <div>😼 <span id="score">0</span></div>
-    <div>🍖 <span id="foodCount">0</span></div>
-  </div>
+    <br><br>
 
-  <!-- JOGO -->
-
-  <div id="cat">😼</div>
-
-  <div id="dog">🐶</div>
-
-  <div id="ground"></div>
-
-  <button id="jump">⬆️</button>
-
-  <!-- MENU -->
-
-  <div id="menu" class="screen">
-
-    <h1>GATO RUN 😼</h1>
-
-    <div>🐶 Pule dos cachorros!</div>
-
-    <div>🍖 Ganhe ração sobrevivendo</div>
-
-    <button class="menuButton" onclick="startGame()">
-      ▶ JOGAR
-    </button>
-
-    <button class="menuButton" onclick="openShop()">
-      🛒 LOJA
-    </button>
-
-  </div>
-
-  <!-- LOJA -->
-
-  <div id="shop" class="screen hidden">
-
-    <h2>🐾 LOJA DE GATOS</h2>
-
-    <div>
-      🍖 Ração:
-      <b id="shopFood">0</b>
-    </div>
-
-    <div id="shopList"></div>
-
-    <button class="menuButton" onclick="closeShop()">
-      ↩ VOLTAR
-    </button>
-
-  </div>
-
-  <!-- GAME OVER -->
-
-  <div id="gameOver" class="screen hidden">
-
-    <h1>GAME OVER</h1>
-
-    <div>🐶 O cachorro pegou você!</div>
-
-    <div>
-      ⏱️ Sobreviveu:
-      <b id="finalScore">0</b>s
-    </div>
-
-    <button class="menuButton" onclick="startGame()">
-      🔄 JOGAR NOVAMENTE
-    </button>
-
-    <button class="menuButton" onclick="backMenu()">
-      🏠 MENU
-    </button>
-
-  </div>
+    Vire o celular de lado
+    <br>
+    para jogar
+    <br>
+    <b>CatRunningAway!</b> 😼
 
 </div>
+
+
+<div id="app">
+
+<!-- MENU -->
+
+<section id="menu" class="screen">
+
+    <div class="menuBg"></div>
+
+    <div class="menuContent">
+
+        <div class="logo">
+            CAT<br>
+            RUNNING<br>
+            AWAY 😼
+        </div>
+
+        <div class="menuCat" id="menuCat">
+            😼
+        </div>
+
+        <div class="menuText">
+            Pule os cachorros para não ser mordido!<br>
+            Sobreviva e ganhe ração.
+        </div>
+
+        <button
+            class="btn green big"
+            id="playBtn">
+
+            ▶ JOGAR
+
+        </button>
+
+        <div>
+
+            <button
+                class="btn"
+                id="shopBtn">
+
+                🛒 LOJA
+
+            </button>
+
+            <button
+                class="btn"
+                id="catsBtn">
+
+                🐾 GATOS
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- JOGO -->
+
+<section
+    id="game"
+    class="screen hidden">
+
+    <div class="hud">
+
+        <div>
+            🍖
+            <span id="foodHud">
+                0
+            </span>
+        </div>
+
+        <div>
+            ⏱
+            <span id="timeHud">
+                0
+            </span>
+            s
+        </div>
+
+        <button
+            class="btn"
+            id="pauseBtn">
+
+            Ⅱ
+
+        </button>
+
+    </div>
+
+
+    <div class="world">
+
+        <div class="cloud c1">
+            ☁️
+        </div>
+
+        <div class="cloud c2">
+            ☁️
+        </div>
+
+        <div class="city"></div>
+
+        <div class="road"></div>
+
+        <div
+            class="player"
+            id="player">
+
+            😼
+
+        </div>
+
+        <div
+            class="dog"
+            id="dog">
+
+            🐶
+
+        </div>
+
+        <div class="tip">
+            TOQUE PARA PULAR
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- GAME OVER -->
+
+<div
+    id="over"
+    class="modal hidden">
+
+    <div
+        class="card panel"
+        style="text-align:center">
+
+        <div class="title">
+            GAME OVER 💀
+        </div>
+
+        <div style="font-size:75px">
+            😿
+        </div>
+
+        <p>
+            O gato encostou no cachorro!
+        </p>
+
+        <p>
+            Você sobreviveu
+            <b>
+                <span id="finalTime">
+                    0
+                </span>s
+            </b>.
+        </p>
+
+        <p>
+            Ganhou
+            <b>
+                <span id="runFood">
+                    0
+                </span>
+                🍖
+            </b>.
+        </p>
+
+        <button
+            class="btn green big"
+            id="againBtn">
+
+            ↻ JOGAR DE NOVO
+
+        </button>
+
+        <br><br>
+
+        <button
+            class="btn big"
+            id="menuBtn">
+
+            🏠 MENU
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- PAUSA -->
+
+<div
+    id="pause"
+    class="modal hidden">
+
+    <div
+        class="card panel"
+        style="text-align:center">
+
+        <div class="title">
+            ⏸ PAUSADO
+        </div>
+
+        <button
+            class="btn green big"
+            id="resumeBtn">
+
+            ▶ CONTINUAR
+
+        </button>
+
+        <br><br>
+
+        <button
+            class="btn big"
+            id="pauseMenuBtn">
+
+            🏠 MENU
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- LOJA -->
+
+<div
+    id="shop"
+    class="modal hidden">
+
+    <div class="card panel">
+
+        <div class="title">
+            🛒 LOJA
+        </div>
+
+        <p>
+            Ração:
+            <b id="shopFood">
+                0
+            </b>
+            🍖
+        </p>
+
+        <div
+            id="shopList"
+            class="shop">
+        </div>
+
+        <br>
+
+        <button
+            class="btn"
+            id="shopClose">
+
+            VOLTAR
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- GATOS -->
+
+<div
+    id="cats"
+    class="modal hidden">
+
+    <div class="card panel">
+
+        <div class="title">
+            🐱 SEUS GATOS
+        </div>
+
+        <p>
+            Ração:
+            <b id="catsFood">
+                0
+            </b>
+            🍖
+        </p>
+
+        <div
+            id="catList"
+            class="catGrid">
+        </div>
+
+        <br>
+
+        <button
+            class="btn"
+            id="catsClose">
+
+            VOLTAR
+
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
 
 <script>
 
@@ -307,95 +901,106 @@ button.menuButton{
    GATOS
 ========================= */
 
-const cats = [
+const CATS = [
 
-  {
-    name:"Gato Comum",
-    emoji:"😼",
-    price:0
-  },
+    {
+        name:"Comum",
+        emoji:"😼",
+        price:0,
+        desc:"Seu gato inicial."
+    },
 
-  {
-    name:"Gato Laranja",
-    emoji:"🐈",
-    price:25
-  },
+    {
+        name:"Laranja",
+        emoji:"🐈",
+        price:25,
+        desc:"Um gato laranja."
+    },
 
-  {
-    name:"Gato Preto",
-    emoji:"🐈‍⬛",
-    price:50
-  },
+    {
+        name:"Preto",
+        emoji:"🐈‍⬛",
+        price:50,
+        desc:"Um gato misterioso."
+    },
 
-  {
-    name:"Gato Branco",
-    emoji:"😺",
-    price:75
-  },
+    {
+        name:"Branco",
+        emoji:"😺",
+        price:75,
+        desc:"Um gato branquinho."
+    },
 
-  {
-    name:"Gato Ninja",
-    emoji:"😸",
-    price:100
-  }
+    {
+        name:"Ninja",
+        emoji:"😸",
+        price:100,
+        desc:"Um gato especial."
+    }
 
 ];
+
+
+/* =========================
+   DADOS SALVOS
+========================= */
+
+let food =
+    Number(
+        localStorage.getItem("cra_food") || 0
+    );
+
+
+let owned =
+    JSON.parse(
+        localStorage.getItem("cra_owned") || "[0]"
+    );
+
+
+let selected =
+    Number(
+        localStorage.getItem("cra_selected") || 0
+    );
+
 
 /* =========================
    VARIÁVEIS
 ========================= */
 
-let food =
-  Number(localStorage.getItem("gatoFood")) || 0;
-
-let owned =
-  JSON.parse(
-    localStorage.getItem("gatoOwned")
-  ) || [0];
-
-let selected =
-  Number(localStorage.getItem("gatoSelected")) || 0;
-
-let score = 0;
-
 let playing = false;
+
+let paused = false;
 
 let jumping = false;
 
-let gameTimer;
+let startTime = 0;
 
-let dogTimer;
+let runFood = 0;
 
-let startTime;
+let score = 0;
+
+let secondTimer = null;
+
+let dogTimer = null;
+
+let collisionRAF = null;
 
 
 /* =========================
    ELEMENTOS
 ========================= */
 
-const cat =
-  document.getElementById("cat");
+const $ =
+    id =>
+    document.getElementById(id);
+
+
+const player =
+    $("player");
+
 
 const dog =
-  document.getElementById("dog");
-
-const scoreText =
-  document.getElementById("score");
-
-const foodText =
-  document.getElementById("foodCount");
-
-const shopFood =
-  document.getElementById("shopFood");
-
-const menu =
-  document.getElementById("menu");
-
-const shop =
-  document.getElementById("shop");
-
-const gameOver =
-  document.getElementById("gameOver");
+    $("dog");
 
 
 /* =========================
@@ -404,33 +1009,89 @@ const gameOver =
 
 function save(){
 
-  localStorage.setItem(
-    "gatoFood",
-    food
-  );
+    localStorage.setItem(
+        "cra_food",
+        food
+    );
 
-  localStorage.setItem(
-    "gatoOwned",
-    JSON.stringify(owned)
-  );
+    localStorage.setItem(
+        "cra_owned",
+        JSON.stringify(owned)
+    );
 
-  localStorage.setItem(
-    "gatoSelected",
-    selected
-  );
+    localStorage.setItem(
+        "cra_selected",
+        selected
+    );
 
 }
 
 
 /* =========================
-   ATUALIZAR RAÇÃO
+   ATUALIZAR INTERFACE
 ========================= */
 
-function updateFood(){
+function updateUI(){
 
-  foodText.textContent = food;
+    $("foodHud").textContent =
+        food;
 
-  shopFood.textContent = food;
+    $("shopFood").textContent =
+        food;
+
+    $("catsFood").textContent =
+        food;
+
+    $("menuCat").textContent =
+        CATS[selected].emoji;
+
+    player.textContent =
+        CATS[selected].emoji;
+
+}
+
+
+/* =========================
+   FECHAR MODAIS
+========================= */
+
+function hideAllModals(){
+
+    [
+        "over",
+        "pause",
+        "shop",
+        "cats"
+    ]
+    .forEach(
+        id =>
+        $(id)
+        .classList
+        .add("hidden")
+    );
+
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+function goMenu(){
+
+    stopGame();
+
+    hideAllModals();
+
+    $("game")
+        .classList
+        .add("hidden");
+
+    $("menu")
+        .classList
+        .remove("hidden");
+
+    updateUI();
 
 }
 
@@ -441,101 +1102,127 @@ function updateFood(){
 
 function startGame(){
 
-  menu.classList.add("hidden");
+    hideAllModals();
 
-  shop.classList.add("hidden");
+    $("menu")
+        .classList
+        .add("hidden");
 
-  gameOver.classList.add("hidden");
-
-  playing = true;
-
-  score = 0;
-
-  startTime = Date.now();
-
-  scoreText.textContent = "0";
-
-  cat.textContent =
-    cats[selected].emoji;
-
-  dog.style.animation = "none";
-
-  dog.style.right = "-90px";
-
-  clearInterval(gameTimer);
-
-  clearInterval(dogTimer);
+    $("game")
+        .classList
+        .remove("hidden");
 
 
-  /* GANHAR RAÇÃO */
+    stopGame();
 
-  gameTimer =
-    setInterval(function(){
 
-      if(!playing) return;
+    playing = true;
 
-      score =
-        Math.floor(
-          (Date.now()-startTime)/1000
+    paused = false;
+
+    jumping = false;
+
+    score = 0;
+
+    runFood = 0;
+
+    startTime =
+        Date.now();
+
+
+    $("timeHud")
+        .textContent =
+        "0";
+
+
+    player.textContent =
+        CATS[selected].emoji;
+
+
+    player.classList
+        .remove("jump");
+
+
+    dog.classList
+        .remove("run");
+
+
+    dog.style.right =
+        "-90px";
+
+
+    secondTimer =
+        setInterval(
+
+            () => {
+
+                if(
+                    !playing ||
+                    paused
+                ){
+                    return;
+                }
+
+
+                score =
+                    Math.floor(
+                        (
+                            Date.now()
+                            -
+                            startTime
+                        ) / 1000
+                    );
+
+
+                $("timeHud")
+                    .textContent =
+                    score;
+
+
+                /* GANHA RAÇÃO A CADA SEGUNDO */
+
+                food++;
+
+                runFood++;
+
+
+                updateUI();
+
+                save();
+
+            },
+
+            1000
+
         );
 
-      scoreText.textContent =
-        score;
 
-      food++;
+    spawnDog();
 
-      updateFood();
-
-      save();
-
-    },1000);
-
-
-  /* CACHORROS */
-
-  dogTimer =
-    setInterval(function(){
-
-      if(playing){
-
-        spawnDog();
-
-      }
-
-    },1400);
-
-
-  spawnDog();
+    collisionLoop();
 
 }
 
 
 /* =========================
-   CACHORRO
+   PARAR
 ========================= */
 
-function spawnDog(){
+function stopGame(){
 
-  if(!playing) return;
+    playing = false;
 
-  dog.style.animation = "none";
-
-  void dog.offsetWidth;
-
-  let speed =
-    Math.max(
-      1.1,
-      2.2 - score*0.01
+    clearInterval(
+        secondTimer
     );
 
-  dog.style.animation =
-    `dogRun ${speed}s linear`;
+    clearTimeout(
+        dogTimer
+    );
 
-  setTimeout(function(){
-
-    checkCollision();
-
-  },speed*700);
+    cancelAnimationFrame(
+        collisionRAF
+    );
 
 }
 
@@ -546,25 +1233,103 @@ function spawnDog(){
 
 function jump(){
 
-  if(!playing) return;
+    if(
+        !playing ||
+        paused ||
+        jumping
+    ){
+        return;
+    }
 
-  if(jumping) return;
 
-  jumping = true;
+    jumping = true;
 
-  cat.classList.add(
-    "jumpAnimation"
-  );
 
-  setTimeout(function(){
+    player.classList
+        .remove("jump");
 
-    cat.classList.remove(
-      "jumpAnimation"
+
+    void player.offsetWidth;
+
+
+    player.classList
+        .add("jump");
+
+
+    setTimeout(
+
+        () => {
+
+            player.classList
+                .remove("jump");
+
+            jumping = false;
+
+        },
+
+        680
+
     );
 
-    jumping = false;
+}
 
-  },650);
+
+/* =========================
+   CACHORRO
+========================= */
+
+function spawnDog(){
+
+    if(
+        !playing ||
+        paused
+    ){
+        return;
+    }
+
+
+    dog.classList
+        .remove("run");
+
+
+    void dog.offsetWidth;
+
+
+    const speed =
+        Math.max(
+            1.0,
+            2.15 -
+            score * 0.012
+        );
+
+
+    dog.style
+        .setProperty(
+            "--speed",
+            speed + "s"
+        );
+
+
+    dog.style.right =
+        "-90px";
+
+
+    dog.classList
+        .add("run");
+
+
+    dogTimer =
+        setTimeout(
+
+            spawnDog,
+
+            Math.max(
+                850,
+                1450 -
+                score * 7
+            )
+
+        );
 
 }
 
@@ -573,26 +1338,84 @@ function jump(){
    COLISÃO
 ========================= */
 
-function checkCollision(){
+function collisionLoop(){
 
-  if(!playing) return;
-
-  const catRect =
-    cat.getBoundingClientRect();
-
-  const dogRect =
-    dog.getBoundingClientRect();
+    if(!playing){
+        return;
+    }
 
 
-  if(
-    catRect.right > dogRect.left+20 &&
-    catRect.left < dogRect.right-20 &&
-    catRect.bottom > dogRect.top+20
-  ){
+    if(!paused){
 
-    endGame();
+        const a =
+            player
+            .getBoundingClientRect();
 
-  }
+
+        const b =
+            dog
+            .getBoundingClientRect();
+
+
+        const ax =
+            a.left +
+            a.width * .22;
+
+
+        const ar =
+            a.right -
+            a.width * .22;
+
+
+        const at =
+            a.top +
+            a.height * .12;
+
+
+        const ab =
+            a.bottom -
+            a.height * .04;
+
+
+        const bx =
+            b.left +
+            b.width * .15;
+
+
+        const br =
+            b.right -
+            b.width * .15;
+
+
+        const bt =
+            b.top +
+            b.height * .12;
+
+
+        const bb =
+            b.bottom;
+
+
+        if(
+            ar > bx &&
+            ax < br &&
+            ab > bt &&
+            at < bb
+        ){
+
+            endGame();
+
+            return;
+
+        }
+
+    }
+
+
+    collisionRAF =
+        requestAnimationFrame(
+            collisionLoop
+        );
 
 }
 
@@ -603,21 +1426,78 @@ function checkCollision(){
 
 function endGame(){
 
-  playing = false;
+    if(!playing){
+        return;
+    }
 
-  clearInterval(gameTimer);
 
-  clearInterval(dogTimer);
+    playing = false;
 
-  document.getElementById(
-    "finalScore"
-  ).textContent = score;
 
-  gameOver.classList.remove(
-    "hidden"
-  );
+    clearInterval(
+        secondTimer
+    );
 
-  save();
+
+    clearTimeout(
+        dogTimer
+    );
+
+
+    cancelAnimationFrame(
+        collisionRAF
+    );
+
+
+    $("finalTime")
+        .textContent =
+        score;
+
+
+    $("runFood")
+        .textContent =
+        runFood;
+
+
+    $("over")
+        .classList
+        .remove("hidden");
+
+
+    save();
+
+}
+
+
+/* =========================
+   PAUSA
+========================= */
+
+function pauseGame(){
+
+    if(!playing){
+        return;
+    }
+
+
+    paused = true;
+
+
+    $("pause")
+        .classList
+        .remove("hidden");
+
+}
+
+
+function resumeGame(){
+
+    paused = false;
+
+
+    $("pause")
+        .classList
+        .add("hidden");
 
 }
 
@@ -626,227 +1506,522 @@ function endGame(){
    LOJA
 ========================= */
 
-function openShop(){
-
-  menu.classList.add(
-    "hidden"
-  );
-
-  shop.classList.remove(
-    "hidden"
-  );
-
-  renderShop();
-
-}
-
-
-function closeShop(){
-
-  shop.classList.add(
-    "hidden"
-  );
-
-  menu.classList.remove(
-    "hidden"
-  );
-
-}
-
-
-/* =========================
-   MOSTRAR LOJA
-========================= */
-
 function renderShop(){
 
-  updateFood();
+    $("shopFood")
+        .textContent =
+        food;
 
-  const list =
-    document.getElementById(
-      "shopList"
+
+    const list =
+        $("shopList");
+
+
+    list.innerHTML = "";
+
+
+    CATS.forEach(
+
+        (cat,index) => {
+
+            const has =
+                owned.includes(index);
+
+
+            const using =
+                selected === index;
+
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "shopItem";
+
+
+            item.innerHTML = `
+
+                <div class="shopEmoji">
+                    ${cat.emoji}
+                </div>
+
+                <div>
+
+                    <div class="shopName">
+                        ${cat.name}
+                    </div>
+
+                    <div class="desc">
+                        ${cat.desc}
+                    </div>
+
+                    <div class="price">
+                        ${
+                            has
+                            ?
+                            "✓ Desbloqueado"
+                            :
+                            "🍖 " + cat.price
+                        }
+                    </div>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="buy ${
+                        has
+                        ?
+                        "owned"
+                        :
+                        ""
+                    }">
+
+                    ${
+                        using
+                        ?
+                        "Usando"
+                        :
+                        has
+                        ?
+                        "USAR"
+                        :
+                        "COMPRAR"
+                    }
+
+                </button>
+
+            `;
+
+
+            const button =
+                item.querySelector(
+                    ".buy"
+                );
+
+
+            /* IMPEDIR QUE O TOQUE
+               PASSE PARA O JOGO */
+
+            button.addEventListener(
+                "pointerdown",
+
+                event => {
+
+                    event.stopPropagation();
+
+                }
+            );
+
+
+            button.addEventListener(
+                "click",
+
+                event => {
+
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+
+                    /* JÁ TEM O GATO */
+
+                    if(has){
+
+                        selected =
+                            index;
+
+
+                        save();
+
+                        updateUI();
+
+                        renderShop();
+
+                        return;
+
+                    }
+
+
+                    /* NÃO TEM RAÇÃO */
+
+                    if(
+                        food <
+                        cat.price
+                    ){
+
+                        alert(
+                            "Você precisa de " +
+                            cat.price +
+                            " 🍖 para comprar " +
+                            cat.name +
+                            "!"
+                        );
+
+                        return;
+
+                    }
+
+
+                    /* COMPRAR */
+
+                    food -=
+                        cat.price;
+
+
+                    owned.push(
+                        index
+                    );
+
+
+                    selected =
+                        index;
+
+
+                    save();
+
+                    updateUI();
+
+                    renderShop();
+
+                }
+            );
+
+
+            list.appendChild(
+                item
+            );
+
+        }
+
     );
 
-  list.innerHTML = "";
+}
 
 
-  cats.forEach(function(catData,index){
+/* =========================
+   GATOS
+========================= */
 
-    const item =
-      document.createElement("div");
+function renderCats(){
 
-    item.className =
-      "shopItem";
-
-
-    let status;
-
-
-    if(owned.includes(index)){
-
-      if(selected === index){
-
-        status = "USANDO";
-
-      }else{
-
-        status = "USAR";
-
-      }
-
-    }else{
-
-      status =
-        "COMPRAR 🍖"+catData.price;
-
-    }
+    $("catsFood")
+        .textContent =
+        food;
 
 
-    item.innerHTML = `
-
-      <div>
-
-        <div class="shopCat">
-          ${catData.emoji}
-        </div>
-
-        <b>${catData.name}</b>
-
-      </div>
-
-      <button class="buy">
-        ${status}
-      </button>
-
-    `;
+    const list =
+        $("catList");
 
 
-    item
-      .querySelector("button")
-      .onclick = function(){
+    list.innerHTML = "";
 
-        /* JÁ TEM */
 
-        if(owned.includes(index)){
+    CATS.forEach(
 
-          selected = index;
+        (cat,index) => {
 
-          cat.textContent =
-            cats[selected].emoji;
+            const has =
+                owned.includes(index);
 
-          save();
 
-          renderShop();
+            const card =
+                document.createElement(
+                    "div"
+                );
 
-          return;
+
+            card.className =
+                "cat " +
+                (
+                    selected === index
+                    ?
+                    "selected"
+                    :
+                    ""
+                );
+
+
+            card.innerHTML = `
+
+                <div class="catEmoji">
+                    ${cat.emoji}
+                </div>
+
+                <b>
+                    ${cat.name}
+                </b>
+
+                <small>
+
+                    ${
+                        has
+                        ?
+                        (
+                            selected === index
+                            ?
+                            "✓ Usando"
+                            :
+                            "Desbloqueado"
+                        )
+                        :
+                        "🍖 " + cat.price
+                    }
+
+                </small>
+
+            `;
+
+
+            if(has){
+
+                card.addEventListener(
+                    "click",
+
+                    () => {
+
+                        selected =
+                            index;
+
+                        save();
+
+                        updateUI();
+
+                        renderCats();
+
+                    }
+                );
+
+            }
+
+
+            list.appendChild(
+                card
+            );
 
         }
 
-
-        /* COMPRAR */
-
-        if(food >= catData.price){
-
-          food -= catData.price;
-
-          owned.push(index);
-
-          selected = index;
-
-          save();
-
-          renderShop();
-
-        }else{
-
-          alert(
-            "Você não tem ração suficiente! 🍖"
-          );
-
-        }
-
-      };
-
-
-    list.appendChild(item);
-
-  });
+    );
 
 }
 
 
 /* =========================
-   MENU
+   BOTÕES
 ========================= */
 
-function backMenu(){
+$("playBtn")
+    .addEventListener(
+        "click",
+        startGame
+    );
 
-  gameOver.classList.add(
-    "hidden"
-  );
 
-  menu.classList.remove(
-    "hidden"
-  );
+$("againBtn")
+    .addEventListener(
+        "click",
+        startGame
+    );
 
-}
+
+$("menuBtn")
+    .addEventListener(
+        "click",
+        goMenu
+    );
+
+
+$("pauseMenuBtn")
+    .addEventListener(
+        "click",
+        goMenu
+    );
+
+
+$("pauseBtn")
+    .addEventListener(
+        "click",
+        pauseGame
+    );
+
+
+$("resumeBtn")
+    .addEventListener(
+        "click",
+        resumeGame
+    );
+
+
+/* LOJA */
+
+$("shopBtn")
+    .addEventListener(
+
+        "click",
+
+        () => {
+
+            renderShop();
+
+            $("shop")
+                .classList
+                .remove("hidden");
+
+        }
+
+    );
+
+
+$("shopClose")
+    .addEventListener(
+
+        "click",
+
+        () => {
+
+            $("shop")
+                .classList
+                .add("hidden");
+
+        }
+
+    );
+
+
+/* GATOS */
+
+$("catsBtn")
+    .addEventListener(
+
+        "click",
+
+        () => {
+
+            renderCats();
+
+            $("cats")
+                .classList
+                .remove("hidden");
+
+        }
+
+    );
+
+
+$("catsClose")
+    .addEventListener(
+
+        "click",
+
+        () => {
+
+            $("cats")
+                .classList
+                .add("hidden");
+
+        }
+
+    );
 
 
 /* =========================
-   CONTROLES
+   TOQUE PARA PULAR
 ========================= */
 
-document
-  .getElementById("jump")
-  .addEventListener(
+$("game")
+.addEventListener(
+
     "pointerdown",
-    function(e){
 
-      e.preventDefault();
+    event => {
 
-      jump();
+        if(
+            !playing ||
+            paused
+        ){
+            return;
+        }
 
-    }
-  );
 
+        if(
+            event.target.closest(
+                "button"
+            )
+        ){
+            return;
+        }
 
-document
-  .getElementById("game")
-  .addEventListener(
-    "pointerdown",
-    function(e){
-
-      if(
-        e.target.tagName !== "BUTTON" &&
-        playing
-      ){
 
         jump();
 
-      }
-
     }
-  );
+
+);
 
 
-/* TECLADO */
+/* =========================
+   TECLADO
+========================= */
 
 document.addEventListener(
-  "keydown",
-  function(e){
 
-    if(
-      e.code === "Space" ||
-      e.code === "ArrowUp"
-    ){
+    "keydown",
 
-      e.preventDefault();
+    event => {
 
-      jump();
+        if(
+            event.code === "Space" ||
+            event.code === "ArrowUp"
+        ){
+
+            event.preventDefault();
+
+            jump();
+
+        }
 
     }
 
-  }
+);
+
+
+/* =========================
+   TENTAR BLOQUEAR
+   EM PAISAGEM
+========================= */
+
+async function lockLandscape(){
+
+    try{
+
+        if(
+            screen.orientation &&
+            screen.orientation.lock
+        ){
+
+            await screen.orientation
+                .lock("landscape");
+
+        }
+
+    }catch(error){
+
+        console.log(
+            "Orientação controlada pelo navegador."
+        );
+
+    }
+
+}
+
+
+$("playBtn")
+.addEventListener(
+    "click",
+    lockLandscape
 );
 
 
@@ -854,12 +2029,9 @@ document.addEventListener(
    INICIALIZAÇÃO
 ========================= */
 
-cat.textContent =
-  cats[selected].emoji;
-
-updateFood();
+updateUI();
 
 </script>
 
 </body>
-</html>
+  </html>
