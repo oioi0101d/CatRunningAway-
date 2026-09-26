@@ -3,127 +3,277 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#07101d">
-<title>CatRunningAway 😼</title>
+<meta name="theme-color" content="#071522">
+<title>CatRunningAway</title>
 
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{
+ box-sizing:border-box;
+ -webkit-tap-highlight-color:transparent;
+}
+
 html,body{
- margin:0;width:100%;height:100%;overflow:hidden;
- background:#07101d;color:white;font-family:Arial,sans-serif;
+ margin:0;
+ width:100%;
+ height:100%;
+ overflow:hidden;
+ background:#071522;
+ color:white;
+ font-family:Arial,sans-serif;
  touch-action:none;
 }
-button{font:inherit;cursor:pointer}
-.hidden{display:none!important}
+
+button{
+ font-family:inherit;
+ cursor:pointer;
+}
+
+.hidden{
+ display:none!important;
+}
+
+/* ROTAÇÃO */
 
 #rotate{
- position:fixed;inset:0;z-index:99999;
- background:#07101d;color:white;
- display:none;align-items:center;justify-content:center;
- text-align:center;font-size:25px;font-weight:900;
+ position:fixed;
+ inset:0;
+ z-index:999999;
+ display:none;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ background:#071522;
+ color:white;
+ font-size:24px;
+ font-weight:900;
  padding:30px;
 }
+
 @media(orientation:portrait){
- #rotate{display:flex}
- #app{display:none!important}
+ #rotate{
+  display:flex;
+ }
+ #app{
+  display:none!important;
+ }
 }
+
+/* APP */
 
 #app{
- position:relative;width:100%;height:100%;
- overflow:hidden;background:#07101d;
+ position:fixed;
+ inset:0;
+ width:100%;
+ height:100%;
+ overflow:hidden;
 }
 
-.screen{position:absolute;inset:0}
+/* BOTÕES */
 
 .btn{
- border:2px solid #3a6f94;
- background:linear-gradient(#123a61,#09213b);
- color:white;border-radius:9px;
- padding:11px 18px;font-weight:900;
- box-shadow:0 3px 0 #030a12;
+ border:2px solid #315d82;
+ border-radius:10px;
+ padding:10px 17px;
+ background:linear-gradient(#17456e,#09233d);
+ color:white;
+ font-weight:900;
+ box-shadow:0 3px 0 #02070b;
 }
-.btn:active{transform:translateY(2px)}
-.btn.green{
- background:linear-gradient(#28ed77,#0bb94e);
- border-color:#57ff98;color:#04130a;
+
+.btn:active{
+ transform:scale(.96);
 }
-.btn.big{min-width:210px;font-size:19px;padding:15px 25px}
+
+.green{
+ background:linear-gradient(#2bea76,#0bb84d);
+ border-color:#63ffa0;
+ color:#03150a;
+}
+
+.big{
+ min-width:210px;
+ font-size:19px;
+ padding:14px 24px;
+}
 
 /* MENU */
+
 #menu{
- display:flex;align-items:center;justify-content:center;
- background:linear-gradient(#061426,#08213e);
+ position:absolute;
+ inset:0;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ overflow:hidden;
+ background:
+  linear-gradient(
+   #061a30 0%,
+   #092744 65%,
+   #123c52 100%
+  );
 }
+
 .menuContent{
- position:relative;z-index:2;text-align:center;
- display:flex;flex-direction:column;
- align-items:center;gap:16px;
+ width:100%;
+ height:100%;
+ max-height:100%;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ gap:8px;
+ padding:8px;
+ text-align:center;
 }
+
 .logo{
- font-size:clamp(35px,8vw,70px);
- font-weight:1000;line-height:1;
- text-shadow:5px 5px #07101a,-3px -3px #168ce0;
+ font-size:clamp(27px,6vw,58px);
+ line-height:.82;
+ font-weight:1000;
+ margin:0;
+ text-shadow:
+ 4px 4px #02080e,
+ -2px -2px #1594e8;
 }
-.menuCat{font-size:78px}
-.menuHint{color:#b8cce0;font-size:13px}
-.menuBottom{display:flex;gap:10px}
+
+.menuCat{
+ font-size:clamp(42px,7vw,68px);
+ line-height:1;
+ margin:2px 0;
+}
+
+.menuHint{
+ font-size:clamp(10px,1.5vw,14px);
+ line-height:1.25;
+ color:#b9ccdd;
+}
+
+.menuButtons{
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ gap:8px;
+}
+
+.menuBottom{
+ display:flex;
+ gap:8px;
+}
 
 /* JOGO */
-#game{background:#5db7e9}
+
+#game{
+ position:absolute;
+ inset:0;
+ background:#58b9e9;
+}
 
 .hud{
- position:absolute;z-index:30;
- top:0;left:0;right:0;height:62px;
- display:flex;align-items:center;
+ position:absolute;
+ z-index:50;
+ top:0;
+ left:0;
+ right:0;
+ height:58px;
+ display:flex;
+ align-items:center;
  justify-content:space-between;
- padding:7px 12px;
- background:linear-gradient(#0b2947,#07192d);
- border-bottom:2px solid #28618c;
+ padding:6px 10px;
+ background:linear-gradient(#0d3153,#071a2c);
+ border-bottom:2px solid #2a628b;
  font-weight:900;
 }
 
 .world{
- position:absolute;top:62px;bottom:0;left:0;right:0;
+ position:absolute;
+ top:58px;
+ left:0;
+ right:0;
+ bottom:0;
  overflow:hidden;
  background:
- linear-gradient(
-  #3ea8e8 0 54%,
-  #5ca64c 54% 63%,
-  #272d32 63% 100%
- );
+  linear-gradient(
+   #4cb6e9 0%,
+   #61bee9 52%,
+   #65ad51 52%,
+   #65ad51 64%,
+   #303438 64%,
+   #303438 100%
+  );
+}
+
+.cloud{
+ position:absolute;
+ font-size:50px;
+ opacity:.65;
+}
+
+.cloud1{
+ top:8%;
+ left:10%;
+}
+
+.cloud2{
+ top:15%;
+ right:15%;
 }
 
 .city{
- position:absolute;left:0;right:0;bottom:37%;
- height:22%;background:#286b84;
+ position:absolute;
+ left:0;
+ right:0;
+ bottom:36%;
+ height:27%;
+ background:#397b91;
  clip-path:polygon(
-  0 70%,5% 48%,10% 65%,15% 30%,20% 55%,
-  25% 40%,30% 62%,35% 25%,40% 60%,45% 45%,
-  50% 62%,55% 30%,60% 58%,65% 38%,70% 63%,
-  75% 28%,80% 56%,85% 40%,90% 62%,95% 30%,
-  100% 55%,100% 100%,0 100%
+  0 70%,4% 50%,8% 68%,12% 32%,17% 61%,
+  22% 42%,27% 66%,32% 25%,37% 58%,42% 40%,
+  47% 64%,52% 29%,57% 60%,62% 38%,67% 65%,
+  72% 31%,77% 57%,82% 43%,87% 64%,92% 34%,
+  96% 58%,100% 43%,100% 100%,0 100%
  );
 }
 
 .road{
- position:absolute;left:0;right:0;bottom:0;height:37%;
- background:linear-gradient(#454c52,#292d31);
- border-top:6px solid #20252a;
+ position:absolute;
+ left:0;
+ right:0;
+ bottom:0;
+ height:37%;
+ background:linear-gradient(#454b50,#292d31);
+ border-top:6px solid #22272b;
 }
 
 .road:after{
- content:"";position:absolute;
- left:0;right:0;top:53%;height:5px;
+ content:"";
+ position:absolute;
+ left:0;
+ right:0;
+ top:52%;
+ height:5px;
  background:repeating-linear-gradient(
-  90deg,#ccc 0 50px,transparent 50px 95px
+  90deg,
+  #ddd 0 55px,
+  transparent 55px 105px
  );
+ opacity:.7;
 }
+
+/* GATO */
 
 .player{
  position:absolute;
- left:14%;bottom:32%;
- font-size:64px;z-index:10;
- filter:drop-shadow(0 7px 3px #0008);
+ z-index:20;
+ left:14%;
+ bottom:32%;
+ width:70px;
+ height:70px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:58px;
+ line-height:1;
+ filter:drop-shadow(0 6px 3px #0008);
 }
 
 .player.jump{
@@ -132,15 +282,25 @@ button{font:inherit;cursor:pointer}
 
 @keyframes jump{
  0%{transform:translateY(0)}
- 45%{transform:translateY(-155px)}
+ 45%{transform:translateY(-150px)}
  100%{transform:translateY(0)}
 }
 
+/* CACHORRO */
+
 .dog{
  position:absolute;
- right:-100px;bottom:32%;
- font-size:60px;z-index:10;
- filter:drop-shadow(0 7px 3px #0008);
+ z-index:20;
+ right:-100px;
+ bottom:32%;
+ width:72px;
+ height:72px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-size:56px;
+ line-height:1;
+ filter:drop-shadow(0 6px 3px #0008);
 }
 
 .dog.run{
@@ -148,115 +308,170 @@ button{font:inherit;cursor:pointer}
 }
 
 @keyframes dogRun{
- from{right:-100px}
- to{right:110%}
+ from{
+  right:-100px;
+ }
+ to{
+  right:110%;
+ }
+}
+
+.gameTip{
+ position:absolute;
+ z-index:30;
+ bottom:7%;
+ left:0;
+ right:0;
+ text-align:center;
+ font-size:14px;
+ font-weight:900;
+ text-shadow:2px 2px #000;
 }
 
 /* MODAIS */
+
 .modal{
- position:absolute;inset:0;z-index:100;
- background:#03101ded;
- display:flex;align-items:center;
- justify-content:center;padding:18px;
+ position:absolute;
+ inset:0;
+ z-index:100;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ padding:12px;
+ background:#020a14eF;
 }
 
 .card{
- width:min(520px,100%);
+ width:min(540px,96vw);
  max-height:92vh;
  overflow:auto;
- padding:20px;
+ padding:18px;
  background:#081d32;
- border:2px solid #24547c;
- border-radius:10px;
- box-shadow:0 8px 30px #0009;
+ border:2px solid #2a6087;
+ border-radius:11px;
+ box-shadow:0 10px 35px #000b;
 }
 
 .title{
  text-align:center;
  font-size:27px;
- font-weight:900;
- margin-bottom:18px;
+ font-weight:1000;
+ margin-bottom:14px;
 }
 
 /* LOJA */
+
 .shop{
  display:flex;
  flex-direction:column;
- gap:9px;
+ gap:8px;
 }
 
 .shopItem{
  display:grid;
- grid-template-columns:60px 1fr auto;
- gap:10px;
+ grid-template-columns:58px 1fr auto;
+ gap:9px;
  align-items:center;
- padding:10px;
- background:#0b2138;
- border:2px solid #204c70;
+ padding:9px;
+ background:#0b253d;
+ border:2px solid #225476;
  border-radius:9px;
 }
 
 .shopEmoji{
- font-size:45px;
+ font-size:42px;
  text-align:center;
 }
 
-.shopName{font-weight:900}
+.shopName{
+ font-weight:900;
+}
+
 .shopDesc{
- font-size:12px;
- color:#a9bed0;
- margin-top:4px;
+ margin-top:3px;
+ font-size:11px;
+ color:#aabfd1;
 }
 
 .price{
+ margin-top:4px;
+ color:#ffe45c;
  font-size:12px;
- color:#ffe45b;
- margin-top:5px;
+ font-weight:900;
 }
 
-.buyBtn{
- min-width:95px;
- padding:11px;
+.buy{
+ min-width:92px;
+ padding:10px 8px;
+ border:2px solid #5aff9a;
  border-radius:8px;
- border:2px solid #53ff99;
- background:#12c95a;
- color:#03170b;
- font-weight:900;
+ background:#11c858;
+ color:#03160a;
+ font-weight:1000;
  touch-action:manipulation;
 }
 
-.buyBtn:active{
- transform:scale(.94);
+.buy:active{
+ transform:scale(.92);
+}
+
+.buy.using{
+ background:#16466e;
+ color:white;
+ border-color:#467da5;
 }
 
 /* GATOS */
+
 .catGrid{
  display:grid;
  grid-template-columns:repeat(3,1fr);
- gap:9px;
+ gap:8px;
 }
 
 .catCard{
- padding:12px 5px;
+ padding:9px 5px;
  text-align:center;
- background:#0a2036;
- border:2px solid #244f73;
+ background:#0b253d;
+ border:2px solid #225476;
  border-radius:9px;
 }
 
 .catCard.selected{
- border-color:#ffe74c;
- box-shadow:0 0 0 2px #ffe74c55;
+ border-color:#ffe64c;
+ box-shadow:0 0 0 2px #ffe64c55;
 }
 
-.catCard .emoji{font-size:46px}
-.catCard b{display:block;margin:5px 0}
-.catCard small{color:#b8c8d7}
+.catEmoji{
+ font-size:42px;
+}
+
+.catCard b{
+ display:block;
+ margin:4px 0;
+}
+
+.catCard small{
+ color:#b7c8d8;
+}
 
 @media(max-width:650px){
- .player{font-size:52px;left:10%}
- .dog{font-size:52px}
- .catGrid{grid-template-columns:repeat(2,1fr)}
+ .catGrid{
+  grid-template-columns:repeat(2,1fr);
+ }
+
+ .player{
+  left:9%;
+  width:64px;
+  height:64px;
+  font-size:52px;
+ }
+
+ .dog{
+  width:66px;
+  height:66px;
+  font-size:50px;
+ }
 }
 </style>
 </head>
@@ -266,15 +481,16 @@ button{font:inherit;cursor:pointer}
 <div id="rotate">
  📱 ↔️
  <br><br>
- Vire o celular de lado para jogar!
- <br><br>
- <b>CatRunningAway 😼</b>
+ <b>Vire o celular de lado!</b>
+ <br>
+ CatRunningAway 😼
 </div>
 
 <div id="app">
 
 <!-- MENU -->
-<section id="menu" class="screen">
+
+<section id="menu">
 
  <div class="menuContent">
 
@@ -287,28 +503,27 @@ button{font:inherit;cursor:pointer}
   <div class="menuCat" id="menuCat">😼</div>
 
   <div class="menuHint">
-   Pule os cachorros para não ser mordido! 🐶
-   <br>
+   Pule os cachorros para não ser mordido! 🐶<br>
    Ganhe 1 🍖 por segundo.
   </div>
 
-  <button
-   id="playBtn"
-   class="btn green big">
+  <div class="menuButtons">
 
-   ▶ JOGAR
-
-  </button>
-
-  <div class="menuBottom">
-
-   <button class="btn" id="shopBtn">
-    🛒 LOJA
+   <button id="playBtn" class="btn green big">
+    ▶ JOGAR
    </button>
 
-   <button class="btn" id="catsBtn">
-    🐱 GATOS
-   </button>
+   <div class="menuBottom">
+
+    <button id="shopBtn" class="btn">
+     🛒 LOJA
+    </button>
+
+    <button id="catsBtn" class="btn">
+     🐱 GATOS
+    </button>
+
+   </div>
 
   </div>
 
@@ -318,7 +533,8 @@ button{font:inherit;cursor:pointer}
 
 
 <!-- JOGO -->
-<section id="game" class="screen hidden">
+
+<section id="game" class="hidden">
 
  <div class="hud">
 
@@ -330,30 +546,29 @@ button{font:inherit;cursor:pointer}
    ⏱ <span id="timeHud">0</span>s
   </div>
 
-  <button class="btn" id="pauseBtn">
+  <button id="pauseBtn" class="btn">
    Ⅱ
   </button>
 
  </div>
 
- <div class="world" id="world">
+ <div id="world" class="world">
+
+  <div class="cloud cloud1">☁️</div>
+  <div class="cloud cloud2">☁️</div>
 
   <div class="city"></div>
   <div class="road"></div>
 
-  <div
-   id="player"
-   class="player">
+  <div id="player" class="player">
    😼
   </div>
 
-  <div
-   id="dog"
-   class="dog">
+  <div id="dog" class="dog">
    🐶
   </div>
 
-  <div class="gameMessage">
+  <div class="gameTip">
    TOQUE PARA PULAR
   </div>
 
@@ -363,7 +578,8 @@ button{font:inherit;cursor:pointer}
 
 
 <!-- GAME OVER -->
-<div id="over" class="modal hidden">
+
+<div id="gameOver" class="modal hidden">
 
  <div class="card" style="text-align:center">
 
@@ -371,44 +587,30 @@ button{font:inherit;cursor:pointer}
    GAME OVER 💀
   </div>
 
-  <div style="font-size:75px">
+  <div style="font-size:70px">
    😿
   </div>
 
   <p>
-   O cachorro mordeu o gato!
+   O gato foi mordido pelo cachorro!
   </p>
 
   <p>
-   Tempo:
-   <b>
-    <span id="finalTime">0</span>s
-   </b>
+   Tempo: <b><span id="finalTime">0</span>s</b>
   </p>
 
   <p>
-   Ração ganha:
-   <b>
-    <span id="runFood">0</span> 🍖
-   </b>
+   Ração ganha: <b><span id="finalFood">0</span> 🍖</b>
   </p>
 
-  <button
-   class="btn green big"
-   id="againBtn">
-
+  <button id="againBtn" class="btn green big">
    ↻ JOGAR DE NOVO
-
   </button>
 
   <br><br>
 
-  <button
-   class="btn big"
-   id="menuBtn">
-
+  <button id="menuBtn" class="btn big">
    🏠 MENU
-
   </button>
 
  </div>
@@ -417,6 +619,7 @@ button{font:inherit;cursor:pointer}
 
 
 <!-- PAUSA -->
+
 <div id="pause" class="modal hidden">
 
  <div class="card" style="text-align:center">
@@ -425,22 +628,14 @@ button{font:inherit;cursor:pointer}
    ⏸ PAUSADO
   </div>
 
-  <button
-   class="btn green big"
-   id="resumeBtn">
-
+  <button id="resumeBtn" class="btn green big">
    ▶ CONTINUAR
-
   </button>
 
   <br><br>
 
-  <button
-   class="btn big"
-   id="pauseMenuBtn">
-
+  <button id="pauseMenuBtn" class="btn big">
    🏠 MENU
-
   </button>
 
  </div>
@@ -449,12 +644,13 @@ button{font:inherit;cursor:pointer}
 
 
 <!-- LOJA -->
+
 <div id="shop" class="modal hidden">
 
  <div class="card">
 
   <div class="title">
-   🛒 LOJA DE GATOS
+   🐾 LOJA DE GATOS
   </div>
 
   <p>
@@ -466,12 +662,8 @@ button{font:inherit;cursor:pointer}
 
   <br>
 
-  <button
-   class="btn"
-   id="shopClose">
-
+  <button id="shopClose" class="btn">
    VOLTAR
-
   </button>
 
  </div>
@@ -480,12 +672,13 @@ button{font:inherit;cursor:pointer}
 
 
 <!-- GATOS -->
+
 <div id="cats" class="modal hidden">
 
  <div class="card">
 
   <div class="title">
-   🐱 SEUS GATOS
+   🐱 SELECIONE SEU GATO
   </div>
 
   <p>
@@ -497,12 +690,8 @@ button{font:inherit;cursor:pointer}
 
   <br>
 
-  <button
-   class="btn"
-   id="catsClose">
-
+  <button id="catsClose" class="btn">
    VOLTAR
-
   </button>
 
  </div>
@@ -514,17 +703,17 @@ button{font:inherit;cursor:pointer}
 
 <script>
 
-/* ==========================
+/* ==============================
    GATOS
-========================== */
+============================== */
 
-const cats=[
+const CATS = [
 
  {
   name:"Comum",
   emoji:"😼",
   price:0,
-  desc:"Seu gato inicial."
+  desc:"O clássico. Sem frescura."
  },
 
  {
@@ -538,14 +727,14 @@ const cats=[
   name:"Preto",
   emoji:"🐈‍⬛",
   price:50,
-  desc:"Um gato misterioso."
+  desc:"Sorte (talvez)."
  },
 
  {
   name:"Branco",
   emoji:"😺",
   price:75,
-  desc:"Um gato branquinho."
+  desc:"Parece inofensivo."
  },
 
  {
@@ -558,9 +747,9 @@ const cats=[
 ];
 
 
-/* ==========================
-   SALVAMENTO
-========================== */
+/* ==============================
+   DADOS
+============================== */
 
 let food =
  Number(localStorage.getItem("cra_food") || 0);
@@ -570,23 +759,31 @@ let owned;
 try{
  owned =
   JSON.parse(
-   localStorage.getItem("cra_owned")
-   || "[0]"
+   localStorage.getItem("cra_owned") || "[0]"
   );
 }catch{
  owned=[0];
 }
 
+if(!Array.isArray(owned)){
+ owned=[0];
+}
+
+if(!owned.includes(0)){
+ owned.unshift(0);
+}
+
 let selected =
- Number(
-  localStorage.getItem("cra_selected")
-  || 0
-);
+ Number(localStorage.getItem("cra_selected") || 0);
+
+if(!owned.includes(selected)){
+ selected=0;
+}
 
 
-/* ==========================
+/* ==============================
    ESTADO
-========================== */
+============================== */
 
 let playing=false;
 let paused=false;
@@ -601,9 +798,9 @@ let dogTimer=null;
 let collisionRAF=null;
 
 
-/* ==========================
+/* ==============================
    ELEMENTOS
-========================== */
+============================== */
 
 const $ =
  id => document.getElementById(id);
@@ -612,9 +809,9 @@ const player=$("player");
 const dog=$("dog");
 
 
-/* ==========================
+/* ==============================
    SALVAR
-========================== */
+============================== */
 
 function save(){
 
@@ -636,9 +833,9 @@ function save(){
 }
 
 
-/* ==========================
+/* ==============================
    INTERFACE
-========================== */
+============================== */
 
 function updateUI(){
 
@@ -647,19 +844,19 @@ function updateUI(){
  $("catsFood").textContent=food;
 
  $("menuCat").textContent=
-  cats[selected].emoji;
+  CATS[selected].emoji;
 
  player.textContent=
-  cats[selected].emoji;
+  CATS[selected].emoji;
 
 }
 
 
-/* ==========================
+/* ==============================
    TELA CHEIA
-========================== */
+============================== */
 
-async function enterFullscreen(){
+async function fullscreen(){
 
  try{
 
@@ -672,16 +869,7 @@ async function enterFullscreen(){
 
   }
 
- }catch(e){
-
-  console.log(
-   "Fullscreen bloqueado pelo navegador."
-  );
-
- }
-
-
- /* TENTA TRAVAR HORIZONTAL */
+ }catch(e){}
 
  try{
 
@@ -690,34 +878,7 @@ async function enterFullscreen(){
    screen.orientation.lock
   ){
 
-   await screen.orientation.lock(
-    "landscape"
-   );
-
-  }
-
- }catch(e){
-
-  console.log(
-   "Orientação controlada pelo sistema."
-  );
-
- }
-
-}
-
-
-/* ==========================
-   SAIR DA TELA CHEIA
-========================== */
-
-async function exitFullscreen(){
-
- try{
-
-  if(document.fullscreenElement){
-
-   await document.exitFullscreen();
+   await screen.orientation.lock("landscape");
 
   }
 
@@ -726,40 +887,20 @@ async function exitFullscreen(){
 }
 
 
-/* ==========================
+/* ==============================
    COMEÇAR
-========================== */
+============================== */
 
 async function startGame(){
 
- /*
-  IMPORTANTE:
-  fullscreen precisa acontecer
-  diretamente no toque do botão.
- */
-
- await enterFullscreen();
-
-
- $("menu")
-  .classList
-  .add("hidden");
-
- $("over")
-  .classList
-  .add("hidden");
-
- $("pause")
-  .classList
-  .add("hidden");
-
- $("game")
-  .classList
-  .remove("hidden");
-
+ await fullscreen();
 
  stopGame();
 
+ closeModals();
+
+ $("menu").classList.add("hidden");
+ $("game").classList.remove("hidden");
 
  playing=true;
  paused=false;
@@ -770,89 +911,64 @@ async function startGame(){
 
  startTime=Date.now();
 
-
- $("timeHud")
-  .textContent="0";
-
+ $("timeHud").textContent="0";
 
  player.textContent=
-  cats[selected].emoji;
+  CATS[selected].emoji;
 
+ player.classList.remove("jump");
 
  dog.classList.remove("run");
 
  dog.style.right="-100px";
 
-
  /* RAÇÃO */
 
- foodTimer=
-  setInterval(
+ foodTimer=setInterval(()=>{
 
-   ()=>{
+  if(!playing || paused){
+   return;
+  }
 
-    if(
-     !playing ||
-     paused
-    ){
-     return;
-    }
+  food++;
+  runFood++;
 
-    food++;
-    runFood++;
-
-    score=
-     Math.floor(
-      (Date.now()-startTime)
-      /1000
-     );
-
-    $("timeHud")
-     .textContent=score;
-
-    updateUI();
-    save();
-
-   },
-
-   1000
-
+  score=Math.floor(
+   (Date.now()-startTime)/1000
   );
 
+  $("timeHud").textContent=score;
+
+  updateUI();
+  save();
+
+ },1000);
 
  spawnDog();
-
  collisionLoop();
 
 }
 
 
-/* ==========================
-   PARAR JOGO
-========================== */
+/* ==============================
+   PARAR
+============================== */
 
 function stopGame(){
 
  playing=false;
 
- clearInterval(
-  foodTimer
- );
+ clearInterval(foodTimer);
+ clearTimeout(dogTimer);
 
- clearTimeout(
-  dogTimer
- );
-
- cancelAnimationFrame(
-  collisionRAF
- );
+ cancelAnimationFrame(collisionRAF);
 
 }
 
 
-/* ==========================
-   PULO
-========================== */
+/* ==============================
+   PULAR
+============================== */
 
 function jump(){
 
@@ -872,87 +988,60 @@ function jump(){
 
  player.classList.add("jump");
 
+ setTimeout(()=>{
 
- setTimeout(
+  player.classList.remove("jump");
 
-  ()=>{
+  jumping=false;
 
-   player.classList.remove(
-    "jump"
-   );
-
-   jumping=false;
-
-  },
-
-  700
-
- );
+ },700);
 
 }
 
 
-/* ==========================
+/* ==============================
    CACHORRO
-========================== */
+============================== */
 
 function spawnDog(){
 
- if(
-  !playing ||
-  paused
- ){
+ if(!playing || paused){
   return;
  }
 
-
- dog.classList.remove(
-  "run"
- );
+ dog.classList.remove("run");
 
  void dog.offsetWidth;
-
 
  const speed=
   Math.max(
    1.05,
-   2.15 -
-   score*0.012
+   2.15-score*0.012
   );
-
 
  dog.style.setProperty(
   "--speed",
   speed+"s"
  );
 
-
  dog.style.right="-100px";
 
+ dog.classList.add("run");
 
- dog.classList.add(
-  "run"
+ dogTimer=setTimeout(
+  spawnDog,
+  Math.max(
+   800,
+   1400-score*6
+  )
  );
-
-
- dogTimer=
-  setTimeout(
-
-   spawnDog,
-
-   Math.max(
-    850,
-    1450-score*7
-   )
-
-  );
 
 }
 
 
-/* ==========================
+/* ==============================
    COLISÃO
-========================== */
+============================== */
 
 function collisionLoop(){
 
@@ -960,53 +1049,63 @@ function collisionLoop(){
   return;
  }
 
-
  if(!paused){
 
-  const a=
+  const p=
    player.getBoundingClientRect();
 
-  const b=
+  const d=
    dog.getBoundingClientRect();
+
+  /*
+   ÁREA DE COLISÃO DO GATO
+  */
+
+  const pLeft=
+   p.left+p.width*.25;
+
+  const pRight=
+   p.right-p.width*.25;
+
+  const pTop=
+   p.top+p.height*.18;
+
+  const pBottom=
+   p.bottom-p.height*.05;
 
 
   /*
-   Caixa de colisão menor que
-   o emoji para deixar o jogo justo.
+   ÁREA DE COLISÃO DO CACHORRO
   */
 
-  const ax=
-   a.left+a.width*.20;
+  const dLeft=
+   d.left+d.width*.18;
 
-  const ar=
-   a.right-a.width*.20;
+  const dRight=
+   d.right-d.width*.18;
 
-  const at=
-   a.top+a.height*.15;
+  const dTop=
+   d.top+d.height*.15;
 
-  const ab=
-   a.bottom-a.height*.05;
-
-
-  const bx=
-   b.left+b.width*.15;
-
-  const br=
-   b.right-b.width*.15;
-
-  const bt=
-   b.top+b.height*.12;
-
-  const bb=
-   b.bottom;
+  const dBottom=
+   d.bottom;
 
 
-  if(
-   ar>bx &&
-   ax<br &&
-   ab>bt &&
-   at<bb
-  ){
+  const horizontal=
+   pRight>dLeft &&
+   pLeft<dRight;
+
+  const vertical=
+   pBottom>dTop &&
+   pTop<dBottom;
+
+
+  /*
+   Se estiverem sobrepostos,
+   morreu.
+  */
+
+  if(horizontal && vertical){
 
    endGame();
 
@@ -1016,7 +1115,6 @@ function collisionLoop(){
 
  }
 
-
  collisionRAF=
   requestAnimationFrame(
    collisionLoop
@@ -1025,9 +1123,9 @@ function collisionLoop(){
 }
 
 
-/* ==========================
+/* ==============================
    GAME OVER
-========================== */
+============================== */
 
 function endGame(){
 
@@ -1035,43 +1133,28 @@ function endGame(){
   return;
  }
 
-
  playing=false;
 
+ clearInterval(foodTimer);
+ clearTimeout(dogTimer);
 
- clearInterval(
-  foodTimer
- );
+ cancelAnimationFrame(collisionRAF);
 
- clearTimeout(
-  dogTimer
- );
+ $("finalTime").textContent=score;
+ $("finalFood").textContent=runFood;
 
- cancelAnimationFrame(
-  collisionRAF
- );
-
-
- $("finalTime")
-  .textContent=score;
-
- $("runFood")
-  .textContent=runFood;
-
-
- $("over")
+ $("gameOver")
   .classList
   .remove("hidden");
-
 
  save();
 
 }
 
 
-/* ==========================
+/* ==============================
    PAUSA
-========================== */
+============================== */
 
 function pauseGame(){
 
@@ -1099,353 +1182,322 @@ function resumeGame(){
 }
 
 
-/* ==========================
-   MENU
-========================== */
+/* ==============================
+   FECHAR MODAIS
+============================== */
 
-async function goMenu(){
+function closeModals(){
+
+ [
+  "gameOver",
+  "pause",
+  "shop",
+  "cats"
+ ].forEach(id=>{
+
+  $(id).classList.add("hidden");
+
+ });
+
+}
+
+
+/* ==============================
+   MENU
+============================== */
+
+function goMenu(){
 
  stopGame();
 
- $("game")
-  .classList
-  .add("hidden");
+ closeModals();
 
- $("over")
-  .classList
-  .add("hidden");
+ $("game").classList.add("hidden");
 
- $("pause")
-  .classList
-  .add("hidden");
-
- $("menu")
-  .classList
-  .remove("hidden");
+ $("menu").classList.remove("hidden");
 
  updateUI();
 
 }
 
 
-/* ==========================
+/* ==============================
    LOJA
-========================== */
+============================== */
 
 function renderShop(){
 
- $("shopFood")
-  .textContent=food;
+ $("shopFood").textContent=food;
 
-
- const list=
-  $("shopList");
-
+ const list=$("shopList");
 
  list.innerHTML="";
 
+ CATS.forEach((cat,index)=>{
 
- cats.forEach(
+  const ownedCat=
+   owned.includes(index);
 
-  (cat,index)=>{
+  const using=
+   selected===index;
 
-   const has=
-    owned.includes(index);
 
-   const using=
-    selected===index;
+  const item=
+   document.createElement("div");
 
+  item.className="shopItem";
 
-   const item=
-    document.createElement(
-     "div"
-    );
+  item.innerHTML=`
 
+   <div class="shopEmoji">
+    ${cat.emoji}
+   </div>
 
-   item.className=
-    "shopItem";
+   <div>
 
-
-   item.innerHTML=`
-
-    <div class="shopEmoji">
-     ${cat.emoji}
-    </div>
-
-    <div>
-
-     <div class="shopName">
-      ${cat.name}
-     </div>
-
-     <div class="shopDesc">
-      ${cat.desc}
-     </div>
-
-     <div class="price">
-
-      ${
-       has
-       ?
-       "✓ Desbloqueado"
-       :
-       "🍖 "+cat.price
-      }
-
-     </div>
-
-    </div>
-
-    <button
-     class="buyBtn">
-
-     ${
-      using
-      ?
-      "Usando"
-      :
-      has
-      ?
-      "USAR"
-      :
-      "COMPRAR"
-     }
-
-    </button>
-
-   `;
-
-
-   const button=
-    item.querySelector(
-     ".buyBtn"
-    );
-
-
-   /*
-    pointerdown evita que o toque
-    seja interpretado como pulo.
-   */
-
-   button.addEventListener(
-    "pointerdown",
-
-    e=>{
-
-     e.stopPropagation();
-
-    }
-   );
-
-
-   button.addEventListener(
-    "click",
-
-    e=>{
-
-     e.preventDefault();
-     e.stopPropagation();
-
-
-     /* USAR */
-
-     if(has){
-
-      selected=index;
-
-      save();
-
-      updateUI();
-
-      renderShop();
-
-      return;
-
-     }
-
-
-     /* SEM RAÇÃO */
-
-     if(food<cat.price){
-
-      alert(
-       "Você precisa de "+
-       cat.price+
-       " 🍖 para comprar "+
-       cat.name+
-       "!"
-      );
-
-      return;
-
-     }
-
-
-     /* COMPRAR */
-
-     food-=cat.price;
-
-     owned.push(index);
-
-     selected=index;
-
-
-     save();
-
-     updateUI();
-
-     renderShop();
-
-    }
-
-   );
-
-
-   list.appendChild(item);
-
-  }
-
- );
-
-}
-
-
-/* ==========================
-   GATOS
-========================== */
-
-function renderCats(){
-
- $("catsFood")
-  .textContent=food;
-
-
- const list=
-  $("catList");
-
-
- list.innerHTML="";
-
-
- cats.forEach(
-
-  (cat,index)=>{
-
-   const has=
-    owned.includes(index);
-
-
-   const card=
-    document.createElement(
-     "div"
-    );
-
-
-   card.className=
-    "catCard "+
-    (
-     selected===index
-     ?
-     "selected"
-     :
-     ""
-    );
-
-
-   card.innerHTML=`
-
-    <div class="emoji">
-     ${cat.emoji}
-    </div>
-
-    <b>
+    <div class="shopName">
      ${cat.name}
-    </b>
+    </div>
 
-    <small>
+    <div class="shopDesc">
+     ${cat.desc}
+    </div>
+
+    <div class="price">
 
      ${
-      has
+      ownedCat
       ?
-      (
-       selected===index
-       ?
-       "✓ Usando"
-       :
-       "Desbloqueado"
-      )
+      "✓ Desbloqueado"
       :
       "🍖 "+cat.price
      }
 
-    </small>
+    </div>
 
-   `;
+   </div>
+
+   <button
+    class="buy ${
+     using
+     ?
+     "using"
+     :
+     ""
+    }">
+
+    ${
+     using
+     ?
+     "USANDO"
+     :
+     ownedCat
+     ?
+     "USAR"
+     :
+     "COMPRAR"
+    }
+
+   </button>
+
+  `;
 
 
-   if(has){
+  const button=
+   item.querySelector(".buy");
 
-    card.addEventListener(
-     "click",
 
-     ()=>{
+  button.addEventListener(
+   "pointerdown",
+   e=>e.stopPropagation()
+  );
 
-      selected=index;
 
-      save();
+  button.addEventListener(
+   "click",
+   e=>{
 
-      updateUI();
+    e.preventDefault();
+    e.stopPropagation();
 
-      renderCats();
 
-     }
+    /* JÁ POSSUI */
 
-    );
+    if(ownedCat){
+
+     selected=index;
+
+     save();
+     updateUI();
+     renderShop();
+
+     return;
+
+    }
+
+
+    /* NÃO TEM RAÇÃO */
+
+    if(food<cat.price){
+
+     alert(
+      "Você precisa de "+
+      cat.price+
+      " 🍖 para comprar "+
+      cat.name+"!"
+     );
+
+     return;
+
+    }
+
+
+    /* COMPRAR */
+
+    food-=cat.price;
+
+    owned.push(index);
+
+    selected=index;
+
+    save();
+    updateUI();
+    renderShop();
 
    }
+  );
 
 
-   list.appendChild(card);
+  list.appendChild(item);
 
-  }
-
- );
+ });
 
 }
 
 
-/* ==========================
+/* ==============================
+   GATOS
+============================== */
+
+function renderCats(){
+
+ $("catsFood").textContent=food;
+
+ const list=$("catList");
+
+ list.innerHTML="";
+
+ CATS.forEach((cat,index)=>{
+
+  const has=
+   owned.includes(index);
+
+  const card=
+   document.createElement("div");
+
+  card.className=
+   "catCard "+
+   (
+    selected===index
+    ?
+    "selected"
+    :
+    ""
+   );
+
+  card.innerHTML=`
+
+   <div class="catEmoji">
+    ${cat.emoji}
+   </div>
+
+   <b>
+    ${cat.name}
+   </b>
+
+   <small>
+
+    ${
+     has
+     ?
+     selected===index
+      ?
+      "✓ Usando"
+      :
+      "Desbloqueado"
+     :
+     "🍖 "+cat.price
+    }
+
+   </small>
+
+  `;
+
+
+  if(has){
+
+   card.addEventListener(
+    "click",
+    ()=>{
+
+     selected=index;
+
+     save();
+     updateUI();
+     renderCats();
+
+    }
+   );
+
+  }
+
+
+  list.appendChild(card);
+
+ });
+
+}
+
+
+/* ==============================
    BOTÕES
-========================== */
+============================== */
 
-$("playBtn").onclick=
- startGame;
+$("playBtn").addEventListener(
+ "click",
+ startGame
+);
 
+$("againBtn").addEventListener(
+ "click",
+ startGame
+);
 
-$("againBtn").onclick=
- startGame;
+$("menuBtn").addEventListener(
+ "click",
+ goMenu
+);
 
+$("pauseMenuBtn").addEventListener(
+ "click",
+ goMenu
+);
 
-$("menuBtn").onclick=
- goMenu;
+$("pauseBtn").addEventListener(
+ "click",
+ pauseGame
+);
 
-
-$("pauseMenuBtn").onclick=
- goMenu;
-
-
-$("pauseBtn").onclick=
- pauseGame;
-
-
-$("resumeBtn").onclick=
- resumeGame;
+$("resumeBtn").addEventListener(
+ "click",
+ resumeGame
+);
 
 
 /* LOJA */
 
-$("shopBtn").onclick=
-
+$("shopBtn").addEventListener(
+ "click",
  ()=>{
 
   renderShop();
@@ -1454,24 +1506,25 @@ $("shopBtn").onclick=
    .classList
    .remove("hidden");
 
- };
+ }
+);
 
-
-$("shopClose").onclick=
-
+$("shopClose").addEventListener(
+ "click",
  ()=>{
 
   $("shop")
    .classList
    .add("hidden");
 
- };
+ }
+);
 
 
 /* GATOS */
 
-$("catsBtn").onclick=
-
+$("catsBtn").addEventListener(
+ "click",
  ()=>{
 
   renderCats();
@@ -1480,62 +1533,49 @@ $("catsBtn").onclick=
    .classList
    .remove("hidden");
 
- };
+ }
+);
 
-
-$("catsClose").onclick=
-
+$("catsClose").addEventListener(
+ "click",
  ()=>{
 
   $("cats")
    .classList
    .add("hidden");
 
- };
+ }
+);
 
 
-/* ==========================
+/* ==============================
    TOQUE PARA PULAR
-========================== */
+============================== */
 
 $("game").addEventListener(
-
  "pointerdown",
-
  e=>{
 
-  if(
-   !playing ||
-   paused
-  ){
+  if(!playing || paused){
    return;
   }
 
-
-  if(
-   e.target.closest(
-    "button"
-   )
-  ){
+  if(e.target.closest("button")){
    return;
   }
-
 
   jump();
 
  }
-
 );
 
 
-/* ==========================
+/* ==============================
    TECLADO
-========================== */
+============================== */
 
 document.addEventListener(
-
  "keydown",
-
  e=>{
 
   if(
@@ -1550,16 +1590,14 @@ document.addEventListener(
   }
 
  }
-
 );
 
 
-/* ==========================
+/* ==============================
    INÍCIO
-========================== */
+============================== */
 
 updateUI();
-
 renderCats();
 
 </script>
