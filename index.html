@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>GATO RUN 😼</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  user-select:none;
+  -webkit-user-select:none;
+}
+
+body{
+  margin:0;
+  overflow:hidden;
+  background:#101827;
+  font-family:Arial,sans-serif;
+  touch-action:manipulation;
+}
+
+#game{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+  background:linear-gradient(
+    #55baf2 0%,
+    #9bddff 55%,
+    #82cf5c 55%,
+    #82cf5c 65%,
+    #555 65%,
+    #333 100%
+  );
+}
+
+/* HUD */
+
+#hud{
+  position:absolute;
+  top:12px;
+  left:15px;
+  right:15px;
+  display:flex;
+  justify-content:space-between;
+  color:white;
+  font-size:21px;
+  font-weight:bold;
+  z-index:20;
+  text-shadow:2px 2px 3px #222;
+}
+
+/* CHÃO */
+
+#ground{
+  position:absolute;
+  left:0;
+  bottom:35%;
+  width:100%;
+  height:10px;
+  background:#292929;
+  border-top:4px solid #171717;
+}
+
+/* GATO */
+
+#cat{
+  position:absolute;
+  left:12%;
+  bottom:35%;
+  font-size:58px;
+  z-index:5;
+}
+
+/* CACHORRO */
+
+#dog{
+  position:absolute;
+  right:-90px;
+  bottom:35%;
+  font-size:58px;
+  z-index:5;
+}
+
+/* RAÇÃO */
+
+.food{
+  position:absolute;
+  font-size:30px;
+  z-index:4;
+}
+
+/* BOTÃO PULO */
+
+#jump{
+  position:absolute;
+  right:20px;
+  bottom:12%;
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  border:0;
+  background:#20d86b;
+  font-size:35px;
+  z-index:30;
+}
+
+/* TELAS */
+
+.screen{
+  position:absolute;
+  inset:0;
+  background:rgba(5,12,25,.95);
+  color:white;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:15px;
+  z-index:100;
+}
+
+.hidden{
+  display:none!important;
+}
+
+h1{
+  font-size:48px;
+  margin:0;
+  text-shadow:4px 4px #111;
+}
+
+h2{
+  font-size:32px;
+}
+
+button.menuButton{
+  width:240px;
+  padding:15px;
+  border:0;
+  border-radius:12px;
+  background:#20d86b;
+  color:#06150c;
+  font-size:21px;
+  font-weight:bold;
+  box-shadow:0 5px #087b39;
+}
+
+/* LOJA */
+
+#shopList{
+  width:min(92%,500px);
+  max-height:60vh;
+  overflow:auto;
+}
+
+.shopItem{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:8px 0;
+  padding:10px;
+  background:#17243a;
+  border:2px solid #304d70;
+  border-radius:12px;
+}
+
+.shopCat{
+  font-size:40px;
+}
+
+.buy{
+  border:0;
+  border-radius:8px;
+  padding:10px;
+  background:#20d86b;
+  font-weight:bold;
+}
+
+/* ANIMAÇÕES */
+
+.jumpAnimation{
+  animation:jump .65s ease;
+}
+
+@keyframes jump{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-160px)}
+  100%{transform:translateY(0)}
+}
+
+.runDog{
+  animation:dogRun 2s linear;
+}
+
+@keyframes dogRun{
+  from{
+    right:-90px;
+  }
+  to{
+    right:110%;
+  }
+}
+
+/* NUVENS */
+
+.cloud{
+  position:absolute;
+  font-size:60px;
+  opacity:.8;
+}
+</style>
+</head>
+
+<body>
+
+<div id="game">
+
+  <div class="cloud" style="top:12%;left:15%">☁️</div>
+  <div class="cloud" style="top:20%;left:65%">☁️</div>
+
+  <!-- HUD -->
+
+  <div id="hud">
+    <div>😼 <span id="score">0</span></div>
+    <div>🍖 <span id="foodCount">0</span></div>
+  </div>
+
+  <!-- JOGO -->
+
+  <div id="cat">😼</div>
+
+  <div id="dog">🐶</div>
+
+  <div id="ground"></div>
+
+  <button id="jump">⬆️</button>
+
+  <!-- MENU -->
+
+  <div id="menu" class="screen">
+
+    <h1>GATO RUN 😼</h1>
+
+    <div>🐶 Pule dos cachorros!</div>
+
+    <div>🍖 Ganhe ração sobrevivendo</div>
+
+    <button class="menuButton" onclick="startGame()">
+      ▶ JOGAR
+    </button>
+
+    <button class="menuButton" onclick="openShop()">
+      🛒 LOJA
+    </button>
+
+  </div>
+
+  <!-- LOJA -->
+
+  <div id="shop" class="screen hidden">
+
+    <h2>🐾 LOJA DE GATOS</h2>
+
+    <div>
+      🍖 Ração:
+      <b id="shopFood">0</b>
+    </div>
+
+    <div id="shopList"></div>
+
+    <button class="menuButton" onclick="closeShop()">
+      ↩ VOLTAR
+    </button>
+
+  </div>
+
+  <!-- GAME OVER -->
+
+  <div id="gameOver" class="screen hidden">
+
+    <h1>GAME OVER</h1>
+
+    <div>🐶 O cachorro pegou você!</div>
+
+    <div>
+      ⏱️ Sobreviveu:
+      <b id="finalScore">0</b>s
+    </div>
+
+    <button class="menuButton" onclick="startGame()">
+      🔄 JOGAR NOVAMENTE
+    </button>
+
+    <button class="menuButton" onclick="backMenu()">
+      🏠 MENU
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+/* =========================
+   GATOS
+========================= */
+
+const cats = [
+
+  {
+    name:"Gato Comum",
+    emoji:"😼",
+    price:0
+  },
+
+  {
+    name:"Gato Laranja",
+    emoji:"🐈",
+    price:25
+  },
+
+  {
+    name:"Gato Preto",
+    emoji:"🐈‍⬛",
+    price:50
+  },
+
+  {
+    name:"Gato Branco",
+    emoji:"😺",
+    price:75
+  },
+
+  {
+    name:"Gato Ninja",
+    emoji:"😸",
+    price:100
+  }
+
+];
+
+/* =========================
+   VARIÁVEIS
+========================= */
+
+let food =
+  Number(localStorage.getItem("gatoFood")) || 0;
+
+let owned =
+  JSON.parse(
+    localStorage.getItem("gatoOwned")
+  ) || [0];
+
+let selected =
+  Number(localStorage.getItem("gatoSelected")) || 0;
+
+let score = 0;
+
+let playing = false;
+
+let jumping = false;
+
+let gameTimer;
+
+let dogTimer;
+
+let startTime;
+
+
+/* =========================
+   ELEMENTOS
+========================= */
+
+const cat =
+  document.getElementById("cat");
+
+const dog =
+  document.getElementById("dog");
+
+const scoreText =
+  document.getElementById("score");
+
+const foodText =
+  document.getElementById("foodCount");
+
+const shopFood =
+  document.getElementById("shopFood");
+
+const menu =
+  document.getElementById("menu");
+
+const shop =
+  document.getElementById("shop");
+
+const gameOver =
+  document.getElementById("gameOver");
+
+
+/* =========================
+   SALVAR
+========================= */
+
+function save(){
+
+  localStorage.setItem(
+    "gatoFood",
+    food
+  );
+
+  localStorage.setItem(
+    "gatoOwned",
+    JSON.stringify(owned)
+  );
+
+  localStorage.setItem(
+    "gatoSelected",
+    selected
+  );
+
+}
+
+
+/* =========================
+   ATUALIZAR RAÇÃO
+========================= */
+
+function updateFood(){
+
+  foodText.textContent = food;
+
+  shopFood.textContent = food;
+
+}
+
+
+/* =========================
+   COMEÇAR
+========================= */
+
+function startGame(){
+
+  menu.classList.add("hidden");
+
+  shop.classList.add("hidden");
+
+  gameOver.classList.add("hidden");
+
+  playing = true;
+
+  score = 0;
+
+  startTime = Date.now();
+
+  scoreText.textContent = "0";
+
+  cat.textContent =
+    cats[selected].emoji;
+
+  dog.style.animation = "none";
+
+  dog.style.right = "-90px";
+
+  clearInterval(gameTimer);
+
+  clearInterval(dogTimer);
+
+
+  /* GANHAR RAÇÃO */
+
+  gameTimer =
+    setInterval(function(){
+
+      if(!playing) return;
+
+      score =
+        Math.floor(
+          (Date.now()-startTime)/1000
+        );
+
+      scoreText.textContent =
+        score;
+
+      food++;
+
+      updateFood();
+
+      save();
+
+    },1000);
+
+
+  /* CACHORROS */
+
+  dogTimer =
+    setInterval(function(){
+
+      if(playing){
+
+        spawnDog();
+
+      }
+
+    },1400);
+
+
+  spawnDog();
+
+}
+
+
+/* =========================
+   CACHORRO
+========================= */
+
+function spawnDog(){
+
+  if(!playing) return;
+
+  dog.style.animation = "none";
+
+  void dog.offsetWidth;
+
+  let speed =
+    Math.max(
+      1.1,
+      2.2 - score*0.01
+    );
+
+  dog.style.animation =
+    `dogRun ${speed}s linear`;
+
+  setTimeout(function(){
+
+    checkCollision();
+
+  },speed*700);
+
+}
+
+
+/* =========================
+   PULAR
+========================= */
+
+function jump(){
+
+  if(!playing) return;
+
+  if(jumping) return;
+
+  jumping = true;
+
+  cat.classList.add(
+    "jumpAnimation"
+  );
+
+  setTimeout(function(){
+
+    cat.classList.remove(
+      "jumpAnimation"
+    );
+
+    jumping = false;
+
+  },650);
+
+}
+
+
+/* =========================
+   COLISÃO
+========================= */
+
+function checkCollision(){
+
+  if(!playing) return;
+
+  const catRect =
+    cat.getBoundingClientRect();
+
+  const dogRect =
+    dog.getBoundingClientRect();
+
+
+  if(
+    catRect.right > dogRect.left+20 &&
+    catRect.left < dogRect.right-20 &&
+    catRect.bottom > dogRect.top+20
+  ){
+
+    endGame();
+
+  }
+
+}
+
+
+/* =========================
+   GAME OVER
+========================= */
+
+function endGame(){
+
+  playing = false;
+
+  clearInterval(gameTimer);
+
+  clearInterval(dogTimer);
+
+  document.getElementById(
+    "finalScore"
+  ).textContent = score;
+
+  gameOver.classList.remove(
+    "hidden"
+  );
+
+  save();
+
+}
+
+
+/* =========================
+   LOJA
+========================= */
+
+function openShop(){
+
+  menu.classList.add(
+    "hidden"
+  );
+
+  shop.classList.remove(
+    "hidden"
+  );
+
+  renderShop();
+
+}
+
+
+function closeShop(){
+
+  shop.classList.add(
+    "hidden"
+  );
+
+  menu.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+/* =========================
+   MOSTRAR LOJA
+========================= */
+
+function renderShop(){
+
+  updateFood();
+
+  const list =
+    document.getElementById(
+      "shopList"
+    );
+
+  list.innerHTML = "";
+
+
+  cats.forEach(function(catData,index){
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "shopItem";
+
+
+    let status;
+
+
+    if(owned.includes(index)){
+
+      if(selected === index){
+
+        status = "USANDO";
+
+      }else{
+
+        status = "USAR";
+
+      }
+
+    }else{
+
+      status =
+        "COMPRAR 🍖"+catData.price;
+
+    }
+
+
+    item.innerHTML = `
+
+      <div>
+
+        <div class="shopCat">
+          ${catData.emoji}
+        </div>
+
+        <b>${catData.name}</b>
+
+      </div>
+
+      <button class="buy">
+        ${status}
+      </button>
+
+    `;
+
+
+    item
+      .querySelector("button")
+      .onclick = function(){
+
+        /* JÁ TEM */
+
+        if(owned.includes(index)){
+
+          selected = index;
+
+          cat.textContent =
+            cats[selected].emoji;
+
+          save();
+
+          renderShop();
+
+          return;
+
+        }
+
+
+        /* COMPRAR */
+
+        if(food >= catData.price){
+
+          food -= catData.price;
+
+          owned.push(index);
+
+          selected = index;
+
+          save();
+
+          renderShop();
+
+        }else{
+
+          alert(
+            "Você não tem ração suficiente! 🍖"
+          );
+
+        }
+
+      };
+
+
+    list.appendChild(item);
+
+  });
+
+}
+
+
+/* =========================
+   MENU
+========================= */
+
+function backMenu(){
+
+  gameOver.classList.add(
+    "hidden"
+  );
+
+  menu.classList.remove(
+    "hidden"
+  );
+
+}
+
+
+/* =========================
+   CONTROLES
+========================= */
+
+document
+  .getElementById("jump")
+  .addEventListener(
+    "pointerdown",
+    function(e){
+
+      e.preventDefault();
+
+      jump();
+
+    }
+  );
+
+
+document
+  .getElementById("game")
+  .addEventListener(
+    "pointerdown",
+    function(e){
+
+      if(
+        e.target.tagName !== "BUTTON" &&
+        playing
+      ){
+
+        jump();
+
+      }
+
+    }
+  );
+
+
+/* TECLADO */
+
+document.addEventListener(
+  "keydown",
+  function(e){
+
+    if(
+      e.code === "Space" ||
+      e.code === "ArrowUp"
+    ){
+
+      e.preventDefault();
+
+      jump();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   INICIALIZAÇÃO
+========================= */
+
+cat.textContent =
+  cats[selected].emoji;
+
+updateFood();
+
+</script>
+
+</body>
+</html>
