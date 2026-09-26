@@ -2,236 +2,117 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#071522">
+<meta name="viewport"
+content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
 <title>CatRunningAway</title>
 
 <style>
 *{
  box-sizing:border-box;
+ margin:0;
+ padding:0;
  -webkit-tap-highlight-color:transparent;
 }
 
 html,body{
- margin:0;
  width:100%;
  height:100%;
  overflow:hidden;
- background:#071522;
- color:white;
+ background:#06111e;
  font-family:Arial,sans-serif;
+ color:white;
+}
+
+body{
  touch-action:none;
 }
 
 button{
  font-family:inherit;
- cursor:pointer;
 }
 
-.hidden{
- display:none!important;
-}
-
-/* ROTAÇÃO */
-
-#rotate{
- position:fixed;
+.screen{
+ position:absolute;
  inset:0;
- z-index:999999;
  display:none;
- align-items:center;
- justify-content:center;
- text-align:center;
- background:#071522;
- color:white;
- font-size:24px;
- font-weight:900;
- padding:30px;
 }
 
-@media(orientation:portrait){
- #rotate{
-  display:flex;
- }
- #app{
-  display:none!important;
- }
+.screen.active{
+ display:flex;
 }
 
-/* APP */
+/* =========================
+   FUNDO
+========================= */
 
-#app{
- position:fixed;
- inset:0;
- width:100%;
- height:100%;
- overflow:hidden;
-}
-
-/* BOTÕES */
-
-.btn{
- border:2px solid #315d82;
- border-radius:10px;
- padding:10px 17px;
- background:linear-gradient(#17456e,#09233d);
- color:white;
- font-weight:900;
- box-shadow:0 3px 0 #02070b;
-}
-
-.btn:active{
- transform:scale(.96);
-}
-
-.green{
- background:linear-gradient(#2bea76,#0bb84d);
- border-color:#63ffa0;
- color:#03150a;
-}
-
-.big{
- min-width:210px;
- font-size:19px;
- padding:14px 24px;
-}
-
-/* MENU */
-
-#menu{
+.bg{
  position:absolute;
  inset:0;
- display:flex;
- align-items:center;
- justify-content:center;
- overflow:hidden;
  background:
-  linear-gradient(
-   #061a30 0%,
-   #092744 65%,
-   #123c52 100%
-  );
-}
-
-.menuContent{
- width:100%;
- height:100%;
- max-height:100%;
- display:flex;
- flex-direction:column;
- align-items:center;
- justify-content:center;
- gap:8px;
- padding:8px;
- text-align:center;
-}
-
-.logo{
- font-size:clamp(27px,6vw,58px);
- line-height:.82;
- font-weight:1000;
- margin:0;
- text-shadow:
- 4px 4px #02080e,
- -2px -2px #1594e8;
-}
-
-.menuCat{
- font-size:clamp(42px,7vw,68px);
- line-height:1;
- margin:2px 0;
-}
-
-.menuHint{
- font-size:clamp(10px,1.5vw,14px);
- line-height:1.25;
- color:#b9ccdd;
-}
-
-.menuButtons{
- display:flex;
- flex-direction:column;
- align-items:center;
- gap:8px;
-}
-
-.menuBottom{
- display:flex;
- gap:8px;
-}
-
-/* JOGO */
-
-#game{
- position:absolute;
- inset:0;
- background:#58b9e9;
-}
-
-.hud{
- position:absolute;
- z-index:50;
- top:0;
- left:0;
- right:0;
- height:58px;
- display:flex;
- align-items:center;
- justify-content:space-between;
- padding:6px 10px;
- background:linear-gradient(#0d3153,#071a2c);
- border-bottom:2px solid #2a628b;
- font-weight:900;
-}
-
-.world{
- position:absolute;
- top:58px;
- left:0;
- right:0;
- bottom:0;
+ linear-gradient(#0876c7 0%,#168fd5 55%,#246e43 55%,#246e43 70%,#151b20 70%);
  overflow:hidden;
- background:
-  linear-gradient(
-   #4cb6e9 0%,
-   #61bee9 52%,
-   #65ad51 52%,
-   #65ad51 64%,
-   #303438 64%,
-   #303438 100%
-  );
 }
 
 .cloud{
  position:absolute;
- font-size:50px;
- opacity:.65;
+ color:#d7edf8;
+ font-size:55px;
+ opacity:.75;
 }
 
-.cloud1{
- top:8%;
- left:10%;
-}
-
-.cloud2{
- top:15%;
- right:15%;
-}
+.c1{left:7%;top:12%}
+.c2{left:38%;top:5%}
+.c3{right:12%;top:16%}
 
 .city{
  position:absolute;
  left:0;
  right:0;
- bottom:36%;
- height:27%;
- background:#397b91;
- clip-path:polygon(
-  0 70%,4% 50%,8% 68%,12% 32%,17% 61%,
-  22% 42%,27% 66%,32% 25%,37% 58%,42% 40%,
-  47% 64%,52% 29%,57% 60%,62% 38%,67% 65%,
-  72% 31%,77% 57%,82% 43%,87% 64%,92% 34%,
-  96% 58%,100% 43%,100% 100%,0 100%
+ bottom:29%;
+ height:25%;
+ opacity:.55;
+ background:
+ linear-gradient(
+  to top,
+  #18506b 0 30%,
+  transparent 30%
  );
+}
+
+.city:before{
+ content:"";
+ position:absolute;
+ inset:0;
+ background:
+ linear-gradient(90deg,
+ #245873 0 7%,
+ transparent 7% 10%,
+ #275b76 10% 17%,
+ transparent 17% 20%,
+ #214f6b 20% 27%,
+ transparent 27% 31%,
+ #285d77 31% 39%,
+ transparent 39% 43%,
+ #20536d 43% 51%,
+ transparent 51% 55%,
+ #2a607b 55% 63%,
+ transparent 63% 67%,
+ #20516b 67% 75%,
+ transparent 75% 79%,
+ #285e76 79% 87%,
+ transparent 87% 91%,
+ #1e4d66 91% 100%
+ );
+}
+
+.grass{
+ position:absolute;
+ left:0;
+ right:0;
+ bottom:28%;
+ height:9%;
+ background:#3d9349;
 }
 
 .road{
@@ -239,9 +120,10 @@ button{
  left:0;
  right:0;
  bottom:0;
- height:37%;
- background:linear-gradient(#454b50,#292d31);
- border-top:6px solid #22272b;
+ height:30%;
+ background:
+ linear-gradient(#41474b,#292d30);
+ border-top:5px solid #25292c;
 }
 
 .road:after{
@@ -249,179 +131,289 @@ button{
  position:absolute;
  left:0;
  right:0;
- top:52%;
+ top:50%;
  height:5px;
  background:repeating-linear-gradient(
   90deg,
-  #ddd 0 55px,
-  transparent 55px 105px
+  #ddd 0 70px,
+  transparent 70px 130px
  );
- opacity:.7;
 }
 
-/* GATO */
+/* =========================
+   MENU PRINCIPAL
+========================= */
 
-.player{
- position:absolute;
- z-index:20;
- left:14%;
- bottom:32%;
- width:70px;
- height:70px;
- display:flex;
+#home{
  align-items:center;
- justify-content:center;
- font-size:58px;
- line-height:1;
- filter:drop-shadow(0 6px 3px #0008);
+ justify-content:flex-end;
 }
 
-.player.jump{
- animation:jump .7s ease-out;
-}
-
-@keyframes jump{
- 0%{transform:translateY(0)}
- 45%{transform:translateY(-150px)}
- 100%{transform:translateY(0)}
-}
-
-/* CACHORRO */
-
-.dog{
- position:absolute;
- z-index:20;
- right:-100px;
- bottom:32%;
- width:72px;
- height:72px;
- display:flex;
- align-items:center;
- justify-content:center;
- font-size:56px;
- line-height:1;
- filter:drop-shadow(0 6px 3px #0008);
-}
-
-.dog.run{
- animation:dogRun var(--speed) linear forwards;
-}
-
-@keyframes dogRun{
- from{
-  right:-100px;
- }
- to{
-  right:110%;
- }
-}
-
-.gameTip{
- position:absolute;
- z-index:30;
- bottom:7%;
- left:0;
- right:0;
- text-align:center;
- font-size:14px;
- font-weight:900;
- text-shadow:2px 2px #000;
-}
-
-/* MODAIS */
-
-.modal{
- position:absolute;
- inset:0;
- z-index:100;
- display:flex;
- align-items:center;
- justify-content:center;
- padding:12px;
- background:#020a14eF;
-}
-
-.card{
- width:min(540px,96vw);
- max-height:92vh;
- overflow:auto;
- padding:18px;
- background:#081d32;
- border:2px solid #2a6087;
- border-radius:11px;
- box-shadow:0 10px 35px #000b;
-}
-
-.title{
- text-align:center;
- font-size:27px;
- font-weight:1000;
- margin-bottom:14px;
-}
-
-/* LOJA */
-
-.shop{
+.homeBox{
+ position:relative;
+ z-index:5;
+ width:43%;
+ min-width:360px;
+ height:100%;
  display:flex;
  flex-direction:column;
- gap:8px;
+ justify-content:center;
+ align-items:center;
+ padding:30px;
+}
+
+.logo{
+ font-size:clamp(42px,6vw,82px);
+ line-height:.82;
+ text-align:center;
+ font-weight:1000;
+ color:#fff;
+ text-shadow:
+ 5px 5px #06111b,
+ -3px -3px #1ca5f4,
+ 3px 0 #1ca5f4;
+}
+
+.logoCat{
+ font-size:85px;
+ margin:25px 0;
+}
+
+.homeSub{
+ color:#d3e6f5;
+ text-align:center;
+ line-height:1.5;
+ font-size:15px;
+ margin-bottom:20px;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+
+.btn{
+ border:2px solid #32688e;
+ border-radius:8px;
+ color:white;
+ background:linear-gradient(#123a60,#09243e);
+ padding:11px 20px;
+ font-weight:900;
+ box-shadow:
+ 0 3px 0 #02070c,
+ inset 0 1px #ffffff22;
+}
+
+.btn:active{
+ transform:translateY(2px);
+}
+
+.green{
+ background:linear-gradient(#20e86b,#09b84b);
+ border-color:#58ff98;
+ color:#fff;
+}
+
+.blue{
+ background:linear-gradient(#168ce5,#0866bd);
+ border-color:#3aafff;
+}
+
+.play{
+ width:230px;
+ font-size:21px;
+ padding:16px;
+ margin-bottom:12px;
+}
+
+.bottomButtons{
+ display:flex;
+ gap:10px;
+}
+
+/* =========================
+   JOGO
+========================= */
+
+#game{
+ background:#0a1b2b;
+}
+
+.gameHud{
+ position:absolute;
+ z-index:30;
+ top:0;
+ left:0;
+ right:0;
+ height:65px;
+ background:linear-gradient(#075ea1,#063c68);
+ border-bottom:2px solid #2079b8;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:7px 20px;
+ font-weight:900;
+ font-size:20px;
+}
+
+.hudLeft{
+ display:flex;
+ flex-direction:column;
+ gap:3px;
+}
+
+.gameCanvas{
+ position:absolute;
+ top:65px;
+ left:0;
+ width:100%;
+ height:calc(100% - 65px);
+}
+
+.pause{
+ font-size:24px;
+ width:50px;
+ height:50px;
+ padding:0;
+}
+
+/* =========================
+   PAINEL GAME OVER
+========================= */
+
+.gameOverPanel{
+ position:absolute;
+ z-index:40;
+ top:0;
+ right:0;
+ width:31%;
+ min-width:310px;
+ height:100%;
+ background:
+ linear-gradient(#071b2eea,#071421f5);
+ border-left:2px solid #2b5e82;
+ display:flex;
+ flex-direction:column;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ padding:25px;
+}
+
+.gameOverTitle{
+ font-size:44px;
+ font-weight:1000;
+ margin-bottom:25px;
+ text-shadow:4px 4px #02070b;
+}
+
+.deadCat{
+ font-size:70px;
+ margin-bottom:15px;
+}
+
+.stats{
+ width:100%;
+ padding:16px;
+ margin:15px 0;
+ border:2px solid #315d80;
+ background:#071a2c;
+ border-radius:8px;
+ line-height:2;
+}
+
+/* =========================
+   LOJA
+========================= */
+
+.panel{
+ position:absolute;
+ z-index:50;
+ right:0;
+ top:0;
+ width:34%;
+ min-width:340px;
+ height:100%;
+ background:#061726;
+ border-left:2px solid #315c7c;
+ padding:18px;
+ overflow:auto;
+}
+
+.panelTitle{
+ font-size:27px;
+ font-weight:1000;
+ margin-bottom:15px;
+}
+
+.food{
+ font-weight:900;
+ margin-bottom:15px;
 }
 
 .shopItem{
+ min-height:86px;
  display:grid;
- grid-template-columns:58px 1fr auto;
- gap:9px;
+ grid-template-columns:55px 1fr 90px;
+ gap:8px;
  align-items:center;
- padding:9px;
- background:#0b253d;
- border:2px solid #225476;
- border-radius:9px;
+ padding:8px;
+ margin-bottom:8px;
+ border:2px solid #214d6e;
+ border-radius:8px;
+ background:#0a2137;
 }
 
-.shopEmoji{
+.shopIcon{
  font-size:42px;
  text-align:center;
 }
 
 .shopName{
  font-weight:900;
+ font-size:15px;
 }
 
 .shopDesc{
- margin-top:3px;
+ color:#a9c0d1;
  font-size:11px;
- color:#aabfd1;
+ margin-top:4px;
 }
 
-.price{
+.shopPrice{
+ color:#ffd83d;
+ font-size:11px;
  margin-top:4px;
- color:#ffe45c;
- font-size:12px;
- font-weight:900;
 }
 
 .buy{
- min-width:92px;
- padding:10px 8px;
- border:2px solid #5aff9a;
- border-radius:8px;
- background:#11c858;
- color:#03160a;
- font-weight:1000;
- touch-action:manipulation;
+ background:#12c958;
+ border:2px solid #5cff9d;
+ color:white;
+ border-radius:7px;
+ padding:10px 5px;
+ font-weight:900;
 }
 
 .buy:active{
- transform:scale(.92);
+ transform:scale(.94);
 }
 
-.buy.using{
- background:#16466e;
- color:white;
- border-color:#467da5;
-}
+/* =========================
+   GATOS
+========================= */
 
-/* GATOS */
+.catPanel{
+ position:absolute;
+ z-index:50;
+ left:0;
+ bottom:0;
+ width:48%;
+ height:47%;
+ min-width:450px;
+ background:#071827;
+ border:2px solid #315b7b;
+ padding:15px;
+}
 
 .catGrid{
  display:grid;
@@ -430,16 +422,17 @@ button{
 }
 
 .catCard{
- padding:9px 5px;
+ background:#0b2339;
+ border:2px solid #244d6d;
+ border-radius:8px;
+ padding:7px;
  text-align:center;
- background:#0b253d;
- border:2px solid #225476;
- border-radius:9px;
+ min-height:120px;
 }
 
 .catCard.selected{
- border-color:#ffe64c;
- box-shadow:0 0 0 2px #ffe64c55;
+ border-color:#ffe83d;
+ box-shadow:0 0 0 2px #ffe83d44;
 }
 
 .catEmoji{
@@ -448,169 +441,267 @@ button{
 
 .catCard b{
  display:block;
- margin:4px 0;
+ margin-top:4px;
 }
 
 .catCard small{
- color:#b7c8d8;
+ color:#ffc928;
 }
 
-@media(max-width:650px){
- .catGrid{
-  grid-template-columns:repeat(2,1fr);
+/* =========================
+   CONFIGURAÇÕES
+========================= */
+
+.infoPanel{
+ position:absolute;
+ z-index:50;
+ left:48%;
+ bottom:0;
+ width:31%;
+ height:47%;
+ background:#071827;
+ border:2px solid #315b7b;
+ padding:18px;
+}
+
+.infoTitle{
+ font-size:22px;
+ font-weight:1000;
+ margin-bottom:18px;
+}
+
+.infoRow{
+ height:48px;
+ border-bottom:1px solid #24445e;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ font-weight:900;
+}
+
+.toggle{
+ width:45px;
+ height:25px;
+ border-radius:20px;
+ background:#15c85b;
+ padding:3px;
+}
+
+.toggle:after{
+ content:"";
+ display:block;
+ width:19px;
+ height:19px;
+ background:white;
+ border-radius:50%;
+ margin-left:17px;
+}
+
+/* =========================
+   RESPONSIVO
+========================= */
+
+@media(max-width:900px){
+
+ .homeBox{
+  width:50%;
  }
 
- .player{
-  left:9%;
-  width:64px;
-  height:64px;
-  font-size:52px;
+ .panel{
+  width:38%;
  }
 
- .dog{
-  width:66px;
-  height:66px;
+ .gameOverPanel{
+  width:35%;
+ }
+
+ .catPanel{
+  width:48%;
+ }
+
+ .infoPanel{
+  width:32%;
+ }
+
+}
+
+@media(max-height:500px){
+
+ .logo{
+  font-size:38px;
+ }
+
+ .logoCat{
   font-size:50px;
+  margin:8px 0;
  }
+
+ .homeSub{
+  font-size:11px;
+  margin-bottom:8px;
+ }
+
+ .play{
+  padding:10px;
+ }
+
+ .gameHud{
+  height:52px;
+ }
+
+ .gameCanvas{
+  top:52px;
+  height:calc(100% - 52px);
+ }
+
+ .catPanel,
+ .infoPanel{
+  height:43%;
+ }
+
 }
 </style>
 </head>
 
 <body>
 
-<div id="rotate">
- 📱 ↔️
- <br><br>
- <b>Vire o celular de lado!</b>
- <br>
- CatRunningAway 😼
-</div>
+<!-- =========================
+     MENU / JOGO / PAINÉIS
+========================= -->
 
-<div id="app">
+<div id="home" class="screen active">
 
-<!-- MENU -->
+ <div class="bg">
+  <div class="cloud c1">☁️</div>
+  <div class="cloud c2">☁️</div>
+  <div class="cloud c3">☁️</div>
+  <div class="city"></div>
+  <div class="grass"></div>
+  <div class="road"></div>
+ </div>
 
-<section id="menu">
-
- <div class="menuContent">
+ <div class="homeBox">
 
   <div class="logo">
    CAT<br>
    RUNNING<br>
-   AWAY 😼
+   AWAY
   </div>
 
-  <div class="menuCat" id="menuCat">😼</div>
-
-  <div class="menuHint">
-   Pule os cachorros para não ser mordido! 🐶<br>
-   Ganhe 1 🍖 por segundo.
+  <div class="logoCat" id="homeCat">
+   😼
   </div>
 
-  <div class="menuButtons">
+  <div class="homeSub">
+   Um gato. Muitos cachorros.<br>
+   Até onde você consegue ir?
+  </div>
 
-   <button id="playBtn" class="btn green big">
-    ▶ JOGAR
+  <button
+   class="btn green play"
+   id="play">
+   ▶ JOGAR
+  </button>
+
+  <div class="bottomButtons">
+
+   <button class="btn" id="openShop">
+    🛒 Loja
    </button>
 
-   <div class="menuBottom">
-
-    <button id="shopBtn" class="btn">
-     🛒 LOJA
-    </button>
-
-    <button id="catsBtn" class="btn">
-     🐱 GATOS
-    </button>
-
-   </div>
+   <button class="btn" id="openCats">
+    🐱 Gatos
+   </button>
 
   </div>
 
  </div>
 
-</section>
+</div>
 
 
-<!-- JOGO -->
+<!-- =========================
+     GAME
+========================= -->
 
-<section id="game" class="hidden">
+<div id="game" class="screen">
 
- <div class="hud">
+ <canvas id="canvas"></canvas>
 
-  <div>
-   🍖 <span id="foodHud">0</span>
+ <div class="gameHud">
+
+  <div class="hudLeft">
+   <div>😼 x <span id="lives">1</span></div>
+   <div>🍖 Ração: <span id="food">0</span></div>
   </div>
 
   <div>
-   ⏱ <span id="timeHud">0</span>s
+   Tempo: <span id="time">0</span>s
   </div>
 
-  <button id="pauseBtn" class="btn">
+  <div>
+   Pontuação: <span id="score">0</span>
+  </div>
+
+  <button class="btn pause" id="pause">
    Ⅱ
   </button>
 
  </div>
 
- <div id="world" class="world">
+</div>
 
-  <div class="cloud cloud1">☁️</div>
-  <div class="cloud cloud2">☁️</div>
 
+<!-- =========================
+     GAME OVER
+========================= -->
+
+<div id="over" class="screen">
+
+ <div class="bg">
+  <div class="cloud c1">☁️</div>
+  <div class="cloud c2">☁️</div>
+  <div class="cloud c3">☁️</div>
   <div class="city"></div>
+  <div class="grass"></div>
   <div class="road"></div>
-
-  <div id="player" class="player">
-   😼
-  </div>
-
-  <div id="dog" class="dog">
-   🐶
-  </div>
-
-  <div class="gameTip">
-   TOQUE PARA PULAR
-  </div>
-
  </div>
 
-</section>
+ <div class="gameOverPanel">
 
-
-<!-- GAME OVER -->
-
-<div id="gameOver" class="modal hidden">
-
- <div class="card" style="text-align:center">
-
-  <div class="title">
-   GAME OVER 💀
+  <div class="gameOverTitle">
+   GAME OVER
   </div>
 
-  <div style="font-size:70px">
-   😿
+  <div class="deadCat">
+   😿 x 0
   </div>
 
-  <p>
-   O gato foi mordido pelo cachorro!
-  </p>
+  <div>
+   Tempo de sobrevivência:
+   <b><span id="finalTime">0</span>s</b>
+  </div>
 
-  <p>
-   Tempo: <b><span id="finalTime">0</span>s</b>
-  </p>
+  <div>
+   Ração coletada:
+   <b><span id="finalFood">0</span></b>
+  </div>
 
-  <p>
-   Ração ganha: <b><span id="finalFood">0</span> 🍖</b>
-  </p>
+  <div class="stats">
+   🍖 Total de ração:
+   <b id="totalFood">0</b>
+  </div>
 
-  <button id="againBtn" class="btn green big">
-   ↻ JOGAR DE NOVO
+  <button
+   class="btn green play"
+   id="again">
+   ↻ Jogar de novo
   </button>
 
-  <br><br>
-
-  <button id="menuBtn" class="btn big">
-   🏠 MENU
+  <button
+   class="btn blue play"
+   id="back">
+   🏠 Menu principal
   </button>
 
  </div>
@@ -618,96 +709,121 @@ button{
 </div>
 
 
-<!-- PAUSA -->
+<!-- =========================
+     LOJA
+========================= -->
 
-<div id="pause" class="modal hidden">
+<div id="shop" class="screen">
 
- <div class="card" style="text-align:center">
-
-  <div class="title">
-   ⏸ PAUSADO
-  </div>
-
-  <button id="resumeBtn" class="btn green big">
-   ▶ CONTINUAR
-  </button>
-
-  <br><br>
-
-  <button id="pauseMenuBtn" class="btn big">
-   🏠 MENU
-  </button>
-
+ <div class="bg">
+  <div class="cloud c1">☁️</div>
+  <div class="cloud c2">☁️</div>
+  <div class="city"></div>
+  <div class="grass"></div>
+  <div class="road"></div>
  </div>
 
-</div>
+ <div class="panel">
 
-
-<!-- LOJA -->
-
-<div id="shop" class="modal hidden">
-
- <div class="card">
-
-  <div class="title">
+  <div class="panelTitle">
    🐾 LOJA DE GATOS
   </div>
 
-  <p>
+  <div class="food">
    🍖 Ração:
-   <b id="shopFood">0</b>
-  </p>
-
-  <div id="shopList" class="shop"></div>
-
-  <br>
-
-  <button id="shopClose" class="btn">
-   VOLTAR
-  </button>
-
- </div>
-
-</div>
-
-
-<!-- GATOS -->
-
-<div id="cats" class="modal hidden">
-
- <div class="card">
-
-  <div class="title">
-   🐱 SELECIONE SEU GATO
+   <span id="shopFood">0</span>
   </div>
 
-  <p>
-   🍖 Ração:
-   <b id="catsFood">0</b>
-  </p>
+  <div id="shopList"></div>
 
-  <div id="catList" class="catGrid"></div>
-
-  <br>
-
-  <button id="catsClose" class="btn">
-   VOLTAR
+  <button class="btn" id="shopBack">
+   ← Voltar
   </button>
 
  </div>
 
 </div>
+
+
+<!-- =========================
+     GATOS
+========================= -->
+
+<div id="cats" class="screen">
+
+ <div class="bg">
+  <div class="cloud c1">☁️</div>
+  <div class="cloud c2">☁️</div>
+  <div class="city"></div>
+  <div class="grass"></div>
+  <div class="road"></div>
+ </div>
+
+ <div class="catPanel">
+
+  <div class="panelTitle">
+   🐾 SELECIONE SEU GATO
+  </div>
+
+  <div class="food">
+   🍖 Ração:
+   <span id="catsFood">0</span>
+  </div>
+
+  <div class="catGrid" id="catList"></div>
+
+  <br>
+
+  <button class="btn" id="catsBack">
+   Voltar
+  </button>
+
+ </div>
+
+
+ <div class="infoPanel">
+
+  <div class="infoTitle">
+   ⚙ CONFIGURAÇÕES / INFORMAÇÕES
+  </div>
+
+  <div class="infoRow">
+   🔊 Som
+   <span class="toggle"></span>
+  </div>
+
+  <div class="infoRow">
+   🎵 Música
+   <span class="toggle"></span>
+  </div>
+
+  <div class="infoRow">
+   🏆 Melhores pontuações
+   <span>›</span>
+  </div>
+
+  <div class="infoRow">
+   ⓘ Como jogar?
+   <span>›</span>
+  </div>
+
+  <div class="infoRow">
+   😼 Sobre o jogo
+   <span>›</span>
+  </div>
+
+ </div>
 
 </div>
 
 
 <script>
 
-/* ==============================
-   GATOS
-============================== */
+/* ==================================
+   CONFIGURAÇÃO
+================================== */
 
-const CATS = [
+const cats=[
 
  {
   name:"Comum",
@@ -720,7 +836,7 @@ const CATS = [
   name:"Laranja",
   emoji:"🐈",
   price:25,
-  desc:"Um gato laranja."
+  desc:"Mais rápido e estiloso."
  },
 
  {
@@ -734,38 +850,34 @@ const CATS = [
   name:"Branco",
   emoji:"😺",
   price:75,
-  desc:"Parece inofensivo."
+  desc:"Parece inofensivo... mas é rápido."
  },
 
  {
   name:"Ninja",
   emoji:"😸",
   price:100,
-  desc:"Um gato especial."
+  desc:"Pula mais alto."
  }
 
 ];
 
 
-/* ==============================
-   DADOS
-============================== */
+/* ==================================
+   SALVAMENTO
+================================== */
 
-let food =
- Number(localStorage.getItem("cra_food") || 0);
+let food=
+ Number(localStorage.getItem("cat_food")||0);
 
 let owned;
 
 try{
- owned =
-  JSON.parse(
-   localStorage.getItem("cra_owned") || "[0]"
-  );
+ owned=
+ JSON.parse(
+  localStorage.getItem("cat_owned")||"[0]"
+ );
 }catch{
- owned=[0];
-}
-
-if(!Array.isArray(owned)){
  owned=[0];
 }
 
@@ -773,90 +885,584 @@ if(!owned.includes(0)){
  owned.unshift(0);
 }
 
-let selected =
- Number(localStorage.getItem("cra_selected") || 0);
+let selected=
+ Number(
+  localStorage.getItem("cat_selected")||0
+);
 
 if(!owned.includes(selected)){
  selected=0;
 }
 
 
-/* ==============================
-   ESTADO
-============================== */
+/* ==================================
+   CANVAS
+================================== */
 
-let playing=false;
+const canvas=
+ document.getElementById("canvas");
+
+const ctx=
+ canvas.getContext("2d");
+
+let W=0;
+let H=0;
+
+function resize(){
+
+ W=canvas.width=
+  window.innerWidth;
+
+ H=canvas.height=
+  window.innerHeight-65;
+
+}
+
+window.addEventListener(
+ "resize",
+ resize
+);
+
+resize();
+
+
+/* ==================================
+   ESTADO
+================================== */
+
+let running=false;
 let paused=false;
 let jumping=false;
 
-let startTime=0;
+let playerY=0;
+let velocityY=0;
+
+let gravity=1800;
+let jumpPower=700;
+
+let dogs=[];
+
+let lastTime=0;
+let elapsed=0;
 let score=0;
-let runFood=0;
+let collected=0;
 
-let foodTimer=null;
-let dogTimer=null;
-let collisionRAF=null;
-
-
-/* ==============================
-   ELEMENTOS
-============================== */
-
-const $ =
- id => document.getElementById(id);
-
-const player=$("player");
-const dog=$("dog");
+let spawnTimer=0;
+let foodTimer=0;
 
 
-/* ==============================
+/* ==================================
+   DESENHO
+================================== */
+
+function drawBackground(){
+
+ const ground=H*.70;
+
+ ctx.fillStyle="#38a9e0";
+ ctx.fillRect(0,0,W,H);
+
+ /* sol */
+
+ ctx.fillStyle="#fff2b0";
+ ctx.beginPath();
+
+ ctx.arc(
+  W*.88,
+  H*.17,
+  27,
+  0,
+  Math.PI*2
+ );
+
+ ctx.fill();
+
+
+ /* nuvens */
+
+ ctx.fillStyle="#d6edf7";
+
+ drawCloud(W*.18,H*.17);
+ drawCloud(W*.48,H*.10);
+ drawCloud(W*.72,H*.18);
+
+
+ /* prédios */
+
+ ctx.fillStyle="#4a7f92";
+
+ for(let x=0;x<W;x+=90){
+
+  let h=
+   45+
+   ((x*7)%80);
+
+  ctx.fillRect(
+   x,
+   ground-70-h,
+   70,
+   h+70
+  );
+
+ }
+
+
+ /* árvores */
+
+ ctx.fillStyle="#348443";
+
+ for(let x=0;x<W;x+=70){
+
+  ctx.beginPath();
+
+  ctx.arc(
+   x+25,
+   ground-18,
+   28,
+   0,
+   Math.PI*2
+  );
+
+  ctx.fill();
+
+ }
+
+
+ /* grama */
+
+ ctx.fillStyle="#55a64b";
+
+ ctx.fillRect(
+ 0,
+ ground-5,
+ W,
+ 50
+ );
+
+
+ /* rua */
+
+ ctx.fillStyle="#34393d";
+
+ ctx.fillRect(
+ 0,
+ ground+35,
+ W,
+ H-ground
+ );
+
+
+ /* linha */
+
+ ctx.fillStyle="#d7d7d7";
+
+ for(let x=0;x<W;x+=130){
+
+  ctx.fillRect(
+   x,
+   ground+75,
+   65,
+   5
+  );
+
+ }
+
+}
+
+
+function drawCloud(x,y){
+
+ ctx.beginPath();
+
+ ctx.arc(x,y,18,0,Math.PI*2);
+ ctx.arc(x+22,y-10,25,0,Math.PI*2);
+ ctx.arc(x+48,y,19,0,Math.PI*2);
+
+ ctx.fill();
+
+}
+
+
+/* ==================================
+   GATO
+================================== */
+
+function drawCat(){
+
+ const x=W*.16;
+ const ground=H*.70;
+
+ const y=
+  ground-
+  62-
+  playerY;
+
+ ctx.font="60px Arial";
+ ctx.textAlign="center";
+
+ ctx.fillText(
+  cats[selected].emoji,
+  x,
+  y
+ );
+
+}
+
+
+/* ==================================
+   CACHORROS
+================================== */
+
+function drawDog(d){
+
+ ctx.font="58px Arial";
+ ctx.textAlign="center";
+
+ ctx.fillText(
+  "🐶",
+  d.x,
+  H*.70+27
+ );
+
+}
+
+
+/* ==================================
+   COLISÃO
+================================== */
+
+function collision(a,b){
+
+ const playerX=W*.16;
+ const playerGround=H*.70;
+
+ const playerLeft=
+  playerX-25;
+
+ const playerRight=
+  playerX+25;
+
+ const playerBottom=
+  playerGround-playerY;
+
+ const playerTop=
+  playerBottom-55;
+
+
+ const dogLeft=
+  b.x-30;
+
+ const dogRight=
+  b.x+30;
+
+ const dogTop=
+  playerGround-55;
+
+ const dogBottom=
+  playerGround+5;
+
+
+ return(
+  playerRight>dogLeft &&
+  playerLeft<dogRight &&
+  playerBottom>dogTop &&
+  playerTop<dogBottom
+ );
+
+}
+
+
+/* ==================================
+   PULO
+================================== */
+
+function jump(){
+
+ if(!running || paused){
+  return;
+ }
+
+ if(playerY>2){
+  return;
+ }
+
+ velocityY=jumpPower;
+ jumping=true;
+
+}
+
+
+/* ==================================
+   SPAWN
+================================== */
+
+function spawnDog(){
+
+ dogs.push({
+
+  x:W+70,
+
+  speed:
+   300+
+   Math.min(score*5,250)
+
+ });
+
+}
+
+
+/* ==================================
+   LOOP
+================================== */
+
+function loop(now){
+
+ if(!running){
+  return;
+ }
+
+ if(!lastTime){
+  lastTime=now;
+ }
+
+ let dt=
+  Math.min(
+   (now-lastTime)/1000,
+   .035
+  );
+
+ lastTime=now;
+
+
+ if(!paused){
+
+  /* tempo */
+
+  elapsed+=dt;
+
+  score=
+   Math.floor(elapsed);
+
+  /* ração */
+
+  foodTimer+=dt;
+
+  if(foodTimer>=1){
+
+   let amount=
+    Math.floor(foodTimer);
+
+   food+=amount;
+
+   collected+=amount;
+
+   foodTimer%=1;
+
+   save();
+
+  }
+
+
+  /* física */
+
+  velocityY-=gravity*dt;
+
+  playerY+=velocityY*dt;
+
+  if(playerY<=0){
+
+   playerY=0;
+   velocityY=0;
+   jumping=false;
+
+  }
+
+
+  /* spawn */
+
+  spawnTimer-=dt;
+
+  if(spawnTimer<=0){
+
+   spawnDog();
+
+   spawnTimer=
+    Math.max(
+     .75,
+     1.55-score*.01
+    );
+
+  }
+
+
+  /* cães */
+
+  for(let i=dogs.length-1;i>=0;i--){
+
+   const d=dogs[i];
+
+   d.x-=d.speed*dt;
+
+   if(collision(null,d)){
+
+    gameOver();
+    return;
+
+   }
+
+   if(d.x<-100){
+
+    dogs.splice(i,1);
+
+   }
+
+  }
+
+ }
+
+
+ draw();
+
+ requestAnimationFrame(loop);
+
+}
+
+
+/* ==================================
+   DESENHAR
+================================== */
+
+function draw(){
+
+ ctx.clearRect(
+ 0,0,W,H
+ );
+
+ drawBackground();
+
+ dogs.forEach(drawDog);
+
+ drawCat();
+
+}
+
+
+/* ==================================
+   INICIAR
+================================== */
+
+function start(){
+
+ document.getElementById("home")
+  .classList.remove("active");
+
+ document.getElementById("over")
+  .classList.remove("active");
+
+ document.getElementById("game")
+  .classList.add("active");
+
+ running=true;
+ paused=false;
+
+ dogs=[];
+
+ elapsed=0;
+ score=0;
+ collected=0;
+
+ playerY=0;
+ velocityY=0;
+
+ spawnTimer=.8;
+ foodTimer=0;
+
+ lastTime=0;
+
+ updateHUD();
+
+ requestAnimationFrame(loop);
+
+ enterFullscreen();
+
+}
+
+
+/* ==================================
+   GAME OVER
+================================== */
+
+function gameOver(){
+
+ running=false;
+
+ document.getElementById("game")
+  .classList.remove("active");
+
+ document.getElementById("over")
+  .classList.add("active");
+
+ document.getElementById("finalTime")
+  .textContent=Math.floor(elapsed);
+
+ document.getElementById("finalFood")
+  .textContent=collected;
+
+ document.getElementById("totalFood")
+  .textContent=food;
+
+ save();
+
+}
+
+
+/* ==================================
+   HUD
+================================== */
+
+function updateHUD(){
+
+ document.getElementById("food")
+  .textContent=food;
+
+ document.getElementById("time")
+  .textContent=Math.floor(elapsed);
+
+ document.getElementById("score")
+  .textContent=score;
+
+}
+
+
+/* ==================================
    SALVAR
-============================== */
+================================== */
 
 function save(){
 
  localStorage.setItem(
-  "cra_food",
+  "cat_food",
   food
  );
 
  localStorage.setItem(
-  "cra_owned",
+  "cat_owned",
   JSON.stringify(owned)
  );
 
  localStorage.setItem(
-  "cra_selected",
+  "cat_selected",
   selected
  );
 
 }
 
 
-/* ==============================
-   INTERFACE
-============================== */
-
-function updateUI(){
-
- $("foodHud").textContent=food;
- $("shopFood").textContent=food;
- $("catsFood").textContent=food;
-
- $("menuCat").textContent=
-  CATS[selected].emoji;
-
- player.textContent=
-  CATS[selected].emoji;
-
-}
-
-
-/* ==============================
+/* ==================================
    TELA CHEIA
-============================== */
+================================== */
 
-async function fullscreen(){
+async function enterFullscreen(){
 
  try{
 
@@ -865,7 +1471,8 @@ async function fullscreen(){
    document.documentElement.requestFullscreen
   ){
 
-   await document.documentElement.requestFullscreen();
+   await document.documentElement
+    .requestFullscreen();
 
   }
 
@@ -878,7 +1485,8 @@ async function fullscreen(){
    screen.orientation.lock
   ){
 
-   await screen.orientation.lock("landscape");
+   await screen.orientation
+    .lock("landscape");
 
   }
 
@@ -887,360 +1495,44 @@ async function fullscreen(){
 }
 
 
-/* ==============================
-   COMEÇAR
-============================== */
+/* ==================================
+   TELAS
+================================== */
 
-async function startGame(){
+function show(id){
 
- await fullscreen();
-
- stopGame();
-
- closeModals();
-
- $("menu").classList.add("hidden");
- $("game").classList.remove("hidden");
-
- playing=true;
- paused=false;
- jumping=false;
-
- score=0;
- runFood=0;
-
- startTime=Date.now();
-
- $("timeHud").textContent="0";
-
- player.textContent=
-  CATS[selected].emoji;
-
- player.classList.remove("jump");
-
- dog.classList.remove("run");
-
- dog.style.right="-100px";
-
- /* RAÇÃO */
-
- foodTimer=setInterval(()=>{
-
-  if(!playing || paused){
-   return;
-  }
-
-  food++;
-  runFood++;
-
-  score=Math.floor(
-   (Date.now()-startTime)/1000
+ document
+  .querySelectorAll(".screen")
+  .forEach(
+   e=>e.classList.remove("active")
   );
 
-  $("timeHud").textContent=score;
-
-  updateUI();
-  save();
-
- },1000);
-
- spawnDog();
- collisionLoop();
+ document
+  .getElementById(id)
+  .classList.add("active");
 
 }
 
 
-/* ==============================
-   PARAR
-============================== */
-
-function stopGame(){
-
- playing=false;
-
- clearInterval(foodTimer);
- clearTimeout(dogTimer);
-
- cancelAnimationFrame(collisionRAF);
-
-}
-
-
-/* ==============================
-   PULAR
-============================== */
-
-function jump(){
-
- if(
-  !playing ||
-  paused ||
-  jumping
- ){
-  return;
- }
-
- jumping=true;
-
- player.classList.remove("jump");
-
- void player.offsetWidth;
-
- player.classList.add("jump");
-
- setTimeout(()=>{
-
-  player.classList.remove("jump");
-
-  jumping=false;
-
- },700);
-
-}
-
-
-/* ==============================
-   CACHORRO
-============================== */
-
-function spawnDog(){
-
- if(!playing || paused){
-  return;
- }
-
- dog.classList.remove("run");
-
- void dog.offsetWidth;
-
- const speed=
-  Math.max(
-   1.05,
-   2.15-score*0.012
-  );
-
- dog.style.setProperty(
-  "--speed",
-  speed+"s"
- );
-
- dog.style.right="-100px";
-
- dog.classList.add("run");
-
- dogTimer=setTimeout(
-  spawnDog,
-  Math.max(
-   800,
-   1400-score*6
-  )
- );
-
-}
-
-
-/* ==============================
-   COLISÃO
-============================== */
-
-function collisionLoop(){
-
- if(!playing){
-  return;
- }
-
- if(!paused){
-
-  const p=
-   player.getBoundingClientRect();
-
-  const d=
-   dog.getBoundingClientRect();
-
-  /*
-   ÁREA DE COLISÃO DO GATO
-  */
-
-  const pLeft=
-   p.left+p.width*.25;
-
-  const pRight=
-   p.right-p.width*.25;
-
-  const pTop=
-   p.top+p.height*.18;
-
-  const pBottom=
-   p.bottom-p.height*.05;
-
-
-  /*
-   ÁREA DE COLISÃO DO CACHORRO
-  */
-
-  const dLeft=
-   d.left+d.width*.18;
-
-  const dRight=
-   d.right-d.width*.18;
-
-  const dTop=
-   d.top+d.height*.15;
-
-  const dBottom=
-   d.bottom;
-
-
-  const horizontal=
-   pRight>dLeft &&
-   pLeft<dRight;
-
-  const vertical=
-   pBottom>dTop &&
-   pTop<dBottom;
-
-
-  /*
-   Se estiverem sobrepostos,
-   morreu.
-  */
-
-  if(horizontal && vertical){
-
-   endGame();
-
-   return;
-
-  }
-
- }
-
- collisionRAF=
-  requestAnimationFrame(
-   collisionLoop
-  );
-
-}
-
-
-/* ==============================
-   GAME OVER
-============================== */
-
-function endGame(){
-
- if(!playing){
-  return;
- }
-
- playing=false;
-
- clearInterval(foodTimer);
- clearTimeout(dogTimer);
-
- cancelAnimationFrame(collisionRAF);
-
- $("finalTime").textContent=score;
- $("finalFood").textContent=runFood;
-
- $("gameOver")
-  .classList
-  .remove("hidden");
-
- save();
-
-}
-
-
-/* ==============================
-   PAUSA
-============================== */
-
-function pauseGame(){
-
- if(!playing){
-  return;
- }
-
- paused=true;
-
- $("pause")
-  .classList
-  .remove("hidden");
-
-}
-
-
-function resumeGame(){
-
- paused=false;
-
- $("pause")
-  .classList
-  .add("hidden");
-
-}
-
-
-/* ==============================
-   FECHAR MODAIS
-============================== */
-
-function closeModals(){
-
- [
-  "gameOver",
-  "pause",
-  "shop",
-  "cats"
- ].forEach(id=>{
-
-  $(id).classList.add("hidden");
-
- });
-
-}
-
-
-/* ==============================
-   MENU
-============================== */
-
-function goMenu(){
-
- stopGame();
-
- closeModals();
-
- $("game").classList.add("hidden");
-
- $("menu").classList.remove("hidden");
-
- updateUI();
-
-}
-
-
-/* ==============================
+/* ==================================
    LOJA
-============================== */
+================================== */
 
 function renderShop(){
 
- $("shopFood").textContent=food;
+ document.getElementById("shopFood")
+  .textContent=food;
 
- const list=$("shopList");
+ const list=
+  document.getElementById("shopList");
 
  list.innerHTML="";
 
- CATS.forEach((cat,index)=>{
 
-  const ownedCat=
-   owned.includes(index);
+ cats.forEach((cat,i)=>{
 
-  const using=
-   selected===index;
-
+  const has=
+   owned.includes(i);
 
   const item=
    document.createElement("div");
@@ -1249,7 +1541,7 @@ function renderShop(){
 
   item.innerHTML=`
 
-   <div class="shopEmoji">
+   <div class="shopIcon">
     ${cat.emoji}
    </div>
 
@@ -1263,39 +1555,26 @@ function renderShop(){
      ${cat.desc}
     </div>
 
-    <div class="price">
-
+    <div class="shopPrice">
      ${
-      ownedCat
-      ?
-      "✓ Desbloqueado"
-      :
-      "🍖 "+cat.price
+      has
+      ?"✓ Desbloqueado"
+      :"🍖 "+cat.price
      }
-
     </div>
 
    </div>
 
-   <button
-    class="buy ${
-     using
-     ?
-     "using"
-     :
-     ""
-    }">
+   <button class="buy">
 
     ${
-     using
+     has
      ?
-     "USANDO"
+      selected===i
+      ?"Usando"
+      :"Usar"
      :
-     ownedCat
-     ?
-     "USAR"
-     :
-     "COMPRAR"
+      "Comprar"
     }
 
    </button>
@@ -1303,69 +1582,53 @@ function renderShop(){
   `;
 
 
-  const button=
+  const btn=
    item.querySelector(".buy");
 
 
-  button.addEventListener(
-   "pointerdown",
-   e=>e.stopPropagation()
-  );
+  btn.onclick=(e)=>{
+
+   e.stopPropagation();
 
 
-  button.addEventListener(
-   "click",
-   e=>{
+   if(has){
 
-    e.preventDefault();
-    e.stopPropagation();
-
-
-    /* JÁ POSSUI */
-
-    if(ownedCat){
-
-     selected=index;
-
-     save();
-     updateUI();
-     renderShop();
-
-     return;
-
-    }
-
-
-    /* NÃO TEM RAÇÃO */
-
-    if(food<cat.price){
-
-     alert(
-      "Você precisa de "+
-      cat.price+
-      " 🍖 para comprar "+
-      cat.name+"!"
-     );
-
-     return;
-
-    }
-
-
-    /* COMPRAR */
-
-    food-=cat.price;
-
-    owned.push(index);
-
-    selected=index;
+    selected=i;
 
     save();
-    updateUI();
     renderShop();
+    renderCats();
+
+    return;
 
    }
-  );
+
+
+   if(food<cat.price){
+
+    alert(
+     "Você precisa de "+
+     cat.price+
+     " 🍖!"
+    );
+
+    return;
+
+   }
+
+
+   food-=cat.price;
+
+   owned.push(i);
+
+   selected=i;
+
+   save();
+
+   renderShop();
+   renderCats();
+
+  };
 
 
   list.appendChild(item);
@@ -1375,22 +1638,22 @@ function renderShop(){
 }
 
 
-/* ==============================
-   GATOS
-============================== */
+/* ==================================
+   SELEÇÃO DE GATOS
+================================== */
 
 function renderCats(){
 
- $("catsFood").textContent=food;
+ document.getElementById("catsFood")
+  .textContent=food;
 
- const list=$("catList");
+ const list=
+  document.getElementById("catList");
 
  list.innerHTML="";
 
- CATS.forEach((cat,index)=>{
 
-  const has=
-   owned.includes(index);
+ cats.forEach((cat,i)=>{
 
   const card=
    document.createElement("div");
@@ -1398,12 +1661,15 @@ function renderCats(){
   card.className=
    "catCard "+
    (
-    selected===index
-    ?
-    "selected"
-    :
-    ""
+    selected===i
+    ?"selected"
+    :""
    );
+
+
+  const has=
+   owned.includes(i);
+
 
   card.innerHTML=`
 
@@ -1416,19 +1682,15 @@ function renderCats(){
    </b>
 
    <small>
-
     ${
      has
      ?
-     selected===index
-      ?
-      "✓ Usando"
-      :
-      "Desbloqueado"
+      selected===i
+      ?"✓"
+      :"Desbloqueado"
      :
-     "🍖 "+cat.price
+      "🍖 "+cat.price
     }
-
    </small>
 
   `;
@@ -1436,18 +1698,14 @@ function renderCats(){
 
   if(has){
 
-   card.addEventListener(
-    "click",
-    ()=>{
+   card.onclick=()=>{
 
-     selected=index;
+    selected=i;
 
-     save();
-     updateUI();
-     renderCats();
+    save();
+    renderCats();
 
-    }
-   );
+   };
 
   }
 
@@ -1456,123 +1714,82 @@ function renderCats(){
 
  });
 
+ document.getElementById("homeCat")
+  .textContent=
+  cats[selected].emoji;
+
 }
 
 
-/* ==============================
-   BOTÕES
-============================== */
+/* ==================================
+   EVENTOS
+================================== */
 
-$("playBtn").addEventListener(
- "click",
- startGame
-);
+document.getElementById("play")
+ .onclick=start;
 
-$("againBtn").addEventListener(
- "click",
- startGame
-);
+document.getElementById("again")
+ .onclick=start;
 
-$("menuBtn").addEventListener(
- "click",
- goMenu
-);
+document.getElementById("back")
+ .onclick=()=>{
+  running=false;
+  show("home");
+ };
 
-$("pauseMenuBtn").addEventListener(
- "click",
- goMenu
-);
-
-$("pauseBtn").addEventListener(
- "click",
- pauseGame
-);
-
-$("resumeBtn").addEventListener(
- "click",
- resumeGame
-);
-
-
-/* LOJA */
-
-$("shopBtn").addEventListener(
- "click",
- ()=>{
-
+document.getElementById("openShop")
+ .onclick=()=>{
   renderShop();
+  show("shop");
+ };
 
-  $("shop")
-   .classList
-   .remove("hidden");
+document.getElementById("shopBack")
+ .onclick=()=>{
+  show("home");
+ };
 
- }
-);
-
-$("shopClose").addEventListener(
- "click",
- ()=>{
-
-  $("shop")
-   .classList
-   .add("hidden");
-
- }
-);
-
-
-/* GATOS */
-
-$("catsBtn").addEventListener(
- "click",
- ()=>{
-
+document.getElementById("openCats")
+ .onclick=()=>{
   renderCats();
+  show("cats");
+ };
 
-  $("cats")
-   .classList
-   .remove("hidden");
-
- }
-);
-
-$("catsClose").addEventListener(
- "click",
- ()=>{
-
-  $("cats")
-   .classList
-   .add("hidden");
-
- }
-);
+document.getElementById("catsBack")
+ .onclick=()=>{
+  show("home");
+ };
 
 
-/* ==============================
-   TOQUE PARA PULAR
-============================== */
+/* ==================================
+   PAUSA
+================================== */
 
-$("game").addEventListener(
- "pointerdown",
- e=>{
+document.getElementById("pause")
+ .onclick=()=>{
 
-  if(!playing || paused){
-   return;
-  }
+  if(!running)return;
 
-  if(e.target.closest("button")){
-   return;
-  }
+  paused=!paused;
 
-  jump();
+  document.getElementById("pause")
+   .textContent=
+   paused
+   ?"▶"
+   :"Ⅱ";
 
- }
-);
+ };
 
 
-/* ==============================
-   TECLADO
-============================== */
+/* ==================================
+   CONTROLES
+================================== */
+
+document.getElementById("canvas")
+ .addEventListener(
+  "pointerdown",
+  jump
+ );
+
 
 document.addEventListener(
  "keydown",
@@ -1584,7 +1801,6 @@ document.addEventListener(
   ){
 
    e.preventDefault();
-
    jump();
 
   }
@@ -1593,12 +1809,30 @@ document.addEventListener(
 );
 
 
-/* ==============================
-   INÍCIO
-============================== */
+/* ==================================
+   HUD ATUALIZADO
+================================== */
 
-updateUI();
+setInterval(()=>{
+
+ if(running && !paused){
+
+  updateHUD();
+
+ }
+
+},100);
+
+
+/* ==================================
+   INICIALIZAÇÃO
+================================== */
+
 renderCats();
+
+document.getElementById("homeCat")
+ .textContent=
+ cats[selected].emoji;
 
 </script>
 
